@@ -1,140 +1,163 @@
 # Swing Music Mobile App
 
-Client Android personnalisé pour Swing Music. Fork modifié avec UI repensée et features custom.
+Custom Android client for Swing Music. Modified fork with a redesigned UI and custom features.
 
-📦 [Télécharger l'APK](https://github.com/ybenyedder/swing-music-mobile-app/releases/latest)
+📦 [Download the APK](https://github.com/ybenyedder/swing-music-mobile-app/releases/latest)
 
-## Aperçu
+## Overview
 
-Application Android (Kotlin + Jetpack Compose) pour streamer ta bibliothèque musicale depuis ton serveur Swing Music. Interface simplifiée à 3 onglets, écran détail playlist intégré, navigation rapide.
+Android app built with Kotlin and Jetpack Compose for streaming your music library from your Swing Music server. It includes a simplified 3-tab interface, a dedicated playlist detail screen, and fast navigation.
 
 ## Features
 
 ### Navigation
-- **3 onglets bottom** : Home · Favorites · Playlists
-- Material3 NavigationBar avec capsule blanche sur item sélectionné
-- Labels toujours visibles (blanc sur fond sombre)
+
+- **3 bottom tabs**: Home · Favorites · Playlists
+- Material3 NavigationBar with a white capsule on the selected item
+- Labels always visible with white text on a dark background
 
 ### Home
-- Header style web : avatar gradient + barre de recherche + bouton settings
-- Tiles parcours rapide (Albums, Artists, Playlists, Favorites, Stats)
-- Onglets de navigation inline (Home / Favorites / Playlists)
-- Recently played + Top artists this week
-- Padding statut bar pour éviter chevauchement
+
+- Web-style header with gradient avatar, search bar, and settings button
+- Quick access tiles: Albums, Artists, Playlists, Favorites, Stats
+- Inline navigation tabs: Home / Favorites / Playlists
+- Recently played section
+- Top artists this week
+- Status bar padding to avoid overlap
 
 ### Favorites
-- Liste de tracks favorites depuis le serveur
-- Tap sur une track → joue immédiatement (queue complète préparée)
-- Source de queue : `FAVORITE`
+
+- Favorite tracks list loaded from the server
+- Tap a track to play it immediately
+- Full queue prepared before playback
+- Queue source: `FAVORITE`
 
 ### Playlists
-- Liste de toutes les playlists du serveur
-- Tap sur une playlist → ouvre **PlaylistDetailScreen** dédié
-- Pas de chargement partiel : toutes les tracks remontent (`?limit=-1`)
 
-### PlaylistDetail (nouveau)
-- Header custom : bouton back + nom playlist + nb tracks + bouton play orange
-- Tap bouton play orange → joue toutes les tracks depuis index 0
-- Tap track individuel → joue à partir de cette position
-- Source de queue : `PLAYLIST(id, name)`
+- List of all playlists from the server
+- Tap a playlist to open the dedicated **PlaylistDetailScreen**
+- No partial loading: all tracks are fetched using `?limit=-1`
 
-### Top bar
-- Caché sur Home, Favorites, Playlists, PlaylistDetail (chaque écran a son propre header)
-- Visible sur écrans secondaires (Albums, Artists, Search, etc.)
-- Logo refait : icône outline blanche sur cercle bleu (style web cohérent)
+### PlaylistDetail
 
-## Stack technique
+- Custom header with back button, playlist name, track count, and orange play button
+- Tap the orange play button to play all tracks from index 0
+- Tap an individual track to play from that position
+- Queue source: `PLAYLIST(id, name)`
 
-- **Langage** : Kotlin
-- **UI** : Jetpack Compose + Material3
-- **Architecture** : MVVM + Repository pattern
-- **DI** : Hilt
-- **Navigation** : Compose Destinations (typesafe)
-- **Réseau** : Retrofit + OkHttp + Gson
-- **DB locale** : Room
-- **Player** : Media3 ExoPlayer
-- **Images** : Coil
+### Top Bar
+
+- Hidden on Home, Favorites, Playlists, and PlaylistDetail
+- Each main screen has its own custom header
+- Visible on secondary screens such as Albums, Artists, Search, etc.
+- Redesigned logo: white outline icon inside a blue circle, matching the web style
+
+## Technical Stack
+
+- **Language**: Kotlin
+- **UI**: Jetpack Compose + Material3
+- **Architecture**: MVVM + Repository pattern
+- **Dependency Injection**: Hilt
+- **Navigation**: Compose Destinations
+- **Network**: Retrofit + OkHttp + Gson
+- **Local Database**: Room
+- **Player**: Media3 ExoPlayer
+- **Images**: Coil
 
 ## Modules
 
-```
-app                    Activité principale + navigation root
-auth                   Authentification + tokens
-core                   Modèles + DTOs + mappers partagés
-database               Room DB (DAOs : BaseUrl, User)
+```text
+app                    Main activity + root navigation
+auth                   Authentication + tokens
+core                   Shared models + DTOs + mappers
+database               Room DB with BaseUrl and User DAOs
 network                Retrofit API service
-uicomponent            Composables partagés + thème
-feature:home           Écrans Home, Favorites, Playlists, PlaylistDetail, Settings
-feature:folder         Écrans dossiers
+uicomponent            Shared composables + theme
+feature:home           Home, Favorites, Playlists, PlaylistDetail, Settings screens
+feature:folder         Folder screens
 feature:album          Albums + AlbumWithInfo
 feature:artist         Artists + ArtistInfo
 feature:player         MediaController + MiniPlayer + NowPlaying + Queue
-feature:search         Recherche
-feature:settings       Réglages
-feature:common         Interfaces navigateur partagées
+feature:search         Search
+feature:settings       Settings
+feature:common         Shared browser interfaces
 ```
 
-## Endpoints utilisés
+## API Endpoints
 
 | Endpoint | Usage |
 |---|---|
-| `GET /favorites/tracks?start=0&limit=200` | Liste favorites |
-| `GET /playlists` | Liste playlists |
-| `GET /playlists/{id}?limit=-1` | Tracks d'une playlist (toutes) |
+| `GET /favorites/tracks?start=0&limit=200` | Favorites list |
+| `GET /playlists` | Playlists list |
+| `GET /playlists/{id}?limit=-1` | All tracks from a playlist |
 
 ## Build
 
-### Prérequis
+### Requirements
+
 - Android SDK 34+
 - JDK 17
 - Gradle 8.x
 
-### Debug
+### Debug Build
+
 ```bash
 ./gradlew :app:assembleDebug
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-### Release signé
+### Signed Release Build
+
 ```bash
-export KEYSTORE_FILE=/chemin/absolu/release-key.keystore
-export KEYSTORE_PASSWORD=ton_password
-export KEY_ALIAS=ton_alias
-export KEY_PASSWORD=ton_key_password
+export KEYSTORE_FILE=/absolute/path/release-key.keystore
+export KEYSTORE_PASSWORD=your_password
+export KEY_ALIAS=your_alias
+export KEY_PASSWORD=your_key_password
 ./gradlew :app:assembleRelease
 ```
 
-APK généré : `app/build/outputs/apk/release/app-release.apk`
+Generated APK:
+
+```text
+app/build/outputs/apk/release/app-release.apk
+```
 
 ## Installation
 
-1. Télécharge `swing-music-v1.0.0.apk` depuis [Releases](https://github.com/ybenyedder/swing-music-mobile-app/releases/latest)
-2. Active "Sources inconnues" dans paramètres Android (Sécurité)
-3. Ouvre l'APK pour installer
-4. Lance l'app → connecte-toi à ton serveur Swing Music (URL + identifiants)
+1. Download `swing-music-v1.0.0.apk` from [Releases](https://github.com/ybenyedder/swing-music-mobile-app/releases/latest)
+2. Enable **Unknown sources** in Android settings
+3. Open the APK to install it
+4. Launch the app
+5. Log in to your Swing Music server using your server URL and credentials
 
-**Min SDK** : 26 (Android 8.0 Oreo)
+**Minimum SDK**: 26  
+**Minimum Android version**: Android 8.0 Oreo
 
-## Configuration serveur
+## Server Configuration
 
-L'app se connecte à une instance Swing Music. Pour héberger ton propre serveur :
-- Repo backend : https://github.com/swingmx/swingmusic
-- Docs : https://swingmx.com/guide/introduction.html
+This app connects to a Swing Music server instance.
+
+To host your own server:
+
+- Backend repository: https://github.com/swingmx/swingmusic
+- Documentation: https://swingmx.com/guide/introduction.html
 
 ## Roadmap
 
-- [ ] R8/proguard rules pour réactiver minify (taille APK réduite)
-- [ ] Pull-to-refresh sur Favorites + Playlists
-- [ ] Recherche dans playlist
-- [ ] Édition playlist depuis l'app
-- [ ] Mode hors ligne (cache tracks)
+- [ ] Add R8/ProGuard rules to re-enable minify and reduce APK size
+- [ ] Add pull-to-refresh on Favorites and Playlists
+- [ ] Add search inside playlists
+- [ ] Add playlist editing from the app
+- [ ] Add offline mode with track caching
 
-## Crédits
+## Credits
 
-Fork basé sur [swingmx/android](https://github.com/swingmx/android). Modifications UI + features custom par [@ybenyedder](https://github.com/ybenyedder).
+Fork based on [swingmx/android](https://github.com/swingmx/android).
 
-Backend serveur : [swingmx/swingmusic](https://github.com/swingmx/swingmusic).
+UI changes and custom features by [@ybenyedder](https://github.com/ybenyedder).
 
-## Licence
+Server backend: [swingmx/swingmusic](https://github.com/swingmx/swingmusic).
 
-Hérite de la licence du projet original. Voir [LICENSE](LICENSE).
+## License
+
+This project inherits the license from the original project. See [LICENSE](LICENSE).
