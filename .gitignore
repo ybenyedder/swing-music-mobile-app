@@ -16,3 +16,7 @@ keystore-base64.txt
 *.jks
 *.apk
 swing-music-app-v2.1-favlists.apk
+
+# Keystore creds + backup (never commit)
+keystore.properties.local
+*.keystore.bak
