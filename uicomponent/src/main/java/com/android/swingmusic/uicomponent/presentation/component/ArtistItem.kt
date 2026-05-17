@@ -23,11 +23,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.android.swingmusic.core.domain.model.Artist
+import com.android.swingmusic.core.domain.util.relativeAgo
 import com.android.swingmusic.uicomponent.R
 import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
+import com.android.swingmusic.uicomponent.presentation.theme.SwingPink
 
 @Composable
 fun ArtistItem(
@@ -59,7 +62,22 @@ fun ArtistItem(
             contentDescription = "Artist Image",
             contentScale = ContentScale.FillWidth,
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(6.dp))
+
+        val ago = relativeAgo(artist.createdDate)
+        if (ago.isNotEmpty()) {
+            Text(
+                text = ago,
+                color = SwingPink,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.8.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+        }
+
         Text(
             text = artist.name,
             maxLines = 1,

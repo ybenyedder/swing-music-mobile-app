@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,8 +73,8 @@ fun PlaylistsScreen(
             ) {
                 item {
                     ScreenHeader(
-                        "Playlists",
-                        "${state.items.size} playlists",
+                        stringResource(R.string.nav_playlists),
+                        stringResource(R.string.playlist_tracks_count, state.items.size),
                         R.drawable.play_list,
                         SwingOrange
                     )
@@ -90,7 +91,7 @@ fun PlaylistsScreen(
                         EmptyState(
                             iconRes = R.drawable.play_list,
                             iconTint = MaterialTheme.colorScheme.error,
-                            title = "Couldn't load playlists",
+                            title = stringResource(R.string.playlists_load_error),
                             subtitle = state.error.orEmpty(),
                         )
                     }
@@ -163,7 +164,7 @@ private fun PlaylistRow(playlist: PlaylistDto, baseUrl: String, onClick: () -> U
         Spacer(Modifier.width(SwingDimens.Small))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = playlist.name.orEmpty().ifBlank { "Untitled" },
+                text = playlist.name.orEmpty().ifBlank { stringResource(R.string.playlist_untitled) },
                 color = SwingWhite,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
@@ -171,7 +172,7 @@ private fun PlaylistRow(playlist: PlaylistDto, baseUrl: String, onClick: () -> U
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
-                text = "${playlist.count ?: 0} tracks",
+                text = stringResource(R.string.playlist_tracks_count, playlist.count ?: 0),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 12.sp,
             )
@@ -221,7 +222,7 @@ private fun PlaylistsEmptyState() {
     EmptyState(
         iconRes = R.drawable.play_list,
         iconTint = SwingOrange,
-        title = "No playlists yet",
-        subtitle = "Create a playlist from the web client. They'll show up here.",
+        title = stringResource(R.string.playlists_empty_title),
+        subtitle = stringResource(R.string.playlists_empty_subtitle),
     )
 }

@@ -13,20 +13,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -36,7 +43,9 @@ import com.android.swingmusic.auth.presentation.viewmodel.AuthViewModel
 import com.android.swingmusic.common.presentation.navigator.CommonNavigator
 import com.android.swingmusic.uicomponent.R
 import com.android.swingmusic.uicomponent.presentation.theme.SwingDimens
+import com.android.swingmusic.uicomponent.presentation.theme.SwingGray
 import com.android.swingmusic.uicomponent.presentation.theme.SwingGray5
+import com.android.swingmusic.uicomponent.presentation.theme.SwingGreen
 import com.android.swingmusic.uicomponent.presentation.theme.SwingHighlightBlue
 import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
 import com.android.swingmusic.uicomponent.presentation.theme.SwingOrange
@@ -44,11 +53,20 @@ import com.android.swingmusic.uicomponent.presentation.theme.SwingPink
 import com.android.swingmusic.uicomponent.presentation.theme.SwingPurple
 import com.android.swingmusic.uicomponent.presentation.theme.SwingTeal
 import com.android.swingmusic.uicomponent.presentation.theme.SwingWhite
+import com.android.swingmusic.uicomponent.presentation.theme.SwingYellow
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlin.math.absoluteValue
 
 private data class SettingsItem(
     val title: String,
     val subtitle: String,
+    val iconRes: Int,
+    val accent: Color,
+    val onClick: () -> Unit,
+)
+
+private data class QuickAction(
+    val label: String,
     val iconRes: Int,
     val accent: Color,
     val onClick: () -> Unit,
@@ -70,29 +88,55 @@ fun SettingsScreen(commonNavigator: CommonNavigator, authViewModel: AuthViewMode
     val serverUrl = authUiState.baseUrl?.trimEnd('/') ?: ""
     val isAdmin = loggedInUser?.roles?.any { it.equals("admin", ignoreCase = true) } == true
 
+    val quickActions = listOf(
+        QuickAction(stringResource(R.string.nav_search), R.drawable.ic_search, SwingHighlightBlue) { commonNavigator.gotoSearch() },
+        QuickAction(stringResource(R.string.nav_pair), R.drawable.swing_music_logo_outlined, SwingTeal) { commonNavigator.gotoLoginWithQrCode() },
+        QuickAction(stringResource(R.string.nav_theme), R.drawable.swing_music_logo_outlined, SwingPurple) { commonNavigator.gotoAppearance() },
+        QuickAction(stringResource(R.string.nav_about), R.drawable.swing_music_logo_outlined, SwingOrange) { commonNavigator.gotoAbout() },
+    )
+
+    val librarySection = listOf(
+        SettingsItem(stringResource(R.string.nav_folders), stringResource(R.string.settings_folders_sub), R.drawable.folder_filled, SwingHighlightBlue) { commonNavigator.gotoFolders() },
+        SettingsItem(stringResource(R.string.nav_albums), stringResource(R.string.settings_albums_sub), R.drawable.ic_album, SwingPurple) { commonNavigator.gotoAlbums() },
+        SettingsItem(stringResource(R.string.nav_artists), stringResource(R.string.settings_artists_sub), R.drawable.ic_artist, SwingPink) { commonNavigator.gotoArtists() },
+        SettingsItem(stringResource(R.string.nav_stats), stringResource(R.string.settings_stats_sub), R.drawable.ic_artist, SwingYellow) { commonNavigator.gotoStats() },
+    )
+
+    val audioSection = listOf(
+        SettingsItem(stringResource(R.string.nav_lyrics), stringResource(R.string.settings_lyrics_sub), R.drawable.lyrics_icon, SwingPink) { commonNavigator.gotoLyrics() },
+        SettingsItem(stringResource(R.string.player_now_playing), stringResource(R.string.settings_playback_sub), R.drawable.play_arrow, SwingTeal) {},
+        SettingsItem("Last.fm", stringResource(R.string.settings_lastfm_sub), R.drawable.swing_music_logo_outlined, SwingOrange) {},
+    )
+
+    val accountSection = listOf(
+        SettingsItem(stringResource(R.string.nav_accounts), stringResource(R.string.settings_accounts_sub), R.drawable.ic_artist, SwingHighlightBlue) { commonNavigator.gotoAccounts() },
+        SettingsItem(stringResource(R.string.nav_appearance), stringResource(R.string.settings_appearance_sub), R.drawable.swing_music_logo_outlined, SwingPurple) { commonNavigator.gotoAppearance() },
+        SettingsItem(stringResource(R.string.nav_about), stringResource(R.string.settings_about_sub), R.drawable.swing_music_logo_outlined, SwingGreen) { commonNavigator.gotoAbout() },
+    )
+
     SwingMusicTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .statusBarsPadding()
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 80.dp, bottom = 96.dp),
-                verticalArrangement = Arrangement.spacedBy(SwingDimens.Small)
+                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 120.dp),
+                verticalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
             ) {
                 item {
                     Text(
                         modifier = Modifier.padding(horizontal = SwingDimens.Large),
-                        text = "Settings",
+                        text = stringResource(R.string.settings_title),
                         color = SwingWhite,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Bold,
                     )
                 }
-                item { Spacer(modifier = Modifier.height(SwingDimens.Small)) }
                 item {
-                    UserHeaderCard(
+                    HeroCard(
                         displayName = displayName,
                         username = username,
                         serverUrl = serverUrl,
@@ -100,95 +144,31 @@ fun SettingsScreen(commonNavigator: CommonNavigator, authViewModel: AuthViewMode
                         onClick = { commonNavigator.gotoAccounts() }
                     )
                 }
-                item { SectionLabel("General") }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Appearance", "Sidebar layout, list mode, inline favorite",
-                        R.drawable.swing_music_logo_outlined, SwingPurple
-                    ) { commonNavigator.gotoAppearance() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Profile", "Username, email, server", R.drawable.ic_artist, SwingHighlightBlue
-                    ) { commonNavigator.gotoAccounts() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Pair device", "Scan QR to pair another server", R.drawable.ic_search, SwingTeal
-                    ) { commonNavigator.gotoLoginWithQrCode() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Accounts", "Switch or add accounts", R.drawable.ic_artist, SwingHighlightBlue
-                    ) { commonNavigator.gotoAccounts() })
-                }
+                item { QuickActionsRow(actions = quickActions) }
 
-                item { SectionLabel("Library") }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Folders", "Root directories and show options",
-                        R.drawable.folder_filled, SwingHighlightBlue
-                    ) { commonNavigator.gotoFolders() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Tracks", "Sorting, metadata", R.drawable.play_arrow, SwingTeal
-                    ) {})
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Albums", "Grid count, sorting", R.drawable.ic_album, SwingPurple
-                    ) { commonNavigator.gotoAlbums() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Artists", "Grid count, sorting", R.drawable.ic_artist, SwingPink
-                    ) { commonNavigator.gotoArtists() })
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Backup", "Export and restore (coming soon)",
-                        R.drawable.swing_music_logo_outlined, SwingTeal
-                    ) {})
-                }
+                item { SectionLabel(stringResource(R.string.settings_section_library)) }
+                item { GroupedCard(items = librarySection) }
 
-                item { SectionLabel("Audio") }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Playback", "Crossfade, gapless, silence detection",
-                        R.drawable.play_arrow, SwingTeal
-                    ) {})
-                }
+                item { SectionLabel(stringResource(R.string.settings_section_audio)) }
+                item { GroupedCard(items = audioSection) }
 
-                item { SectionLabel("Plugins") }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Lyrics", "Synced lyrics, auto-fetch", R.drawable.lyrics_icon, SwingPink
-                    ) {})
-                }
-                item {
-                    SettingsRow(SettingsItem(
-                        "Last.fm", "Scrobbling (coming soon)",
-                        R.drawable.swing_music_logo_outlined, SwingOrange
-                    ) {})
-                }
+                item { SectionLabel(stringResource(R.string.settings_section_account)) }
+                item { GroupedCard(items = accountSection) }
 
                 if (isAdmin) {
-                    item { SectionLabel("Admin") }
+                    item { SectionLabel(stringResource(R.string.settings_section_admin)) }
                     item {
-                        SettingsRow(SettingsItem(
-                            "Manage server users", "Create users and assign roles",
-                            R.drawable.ic_artist, SwingTeal
-                        ) { commonNavigator.gotoAdminUsers() })
+                        GroupedCard(
+                            items = listOf(
+                                SettingsItem(
+                                    stringResource(R.string.settings_manage_users),
+                                    stringResource(R.string.settings_manage_users_sub),
+                                    R.drawable.ic_artist,
+                                    SwingTeal
+                                ) { commonNavigator.gotoAdminUsers() }
+                            )
+                        )
                     }
-                }
-
-                item { Spacer(modifier = Modifier.height(SwingDimens.Medium)) }
-                item {
-                    SettingsRow(SettingsItem(
-                        "About", "Version, changelog, links",
-                        R.drawable.swing_music_logo_outlined, SwingTeal
-                    ) { commonNavigator.gotoAbout() })
                 }
             }
         }
@@ -196,79 +176,147 @@ fun SettingsScreen(commonNavigator: CommonNavigator, authViewModel: AuthViewMode
 }
 
 @Composable
-private fun UserHeaderCard(
+private fun HeroCard(
     displayName: String,
     username: String,
     serverUrl: String,
     isAdmin: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    Row(
+    val gradient = remember(displayName) { gradientForName(displayName) }
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = SwingDimens.Large)
-            .clip(RoundedCornerShape(SwingDimens.RadiusLg))
+            .clip(RoundedCornerShape(24.dp))
             .background(SwingGray5)
             .clickable(onClick = onClick)
-            .padding(SwingDimens.Medium),
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(SwingDimens.Large),
+        verticalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
     ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape)
-                .background(SwingHighlightBlue.copy(alpha = 0.22f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = (displayName.firstOrNull()?.uppercase() ?: "?"),
-                color = SwingHighlightBlue,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-            )
-        }
-        Spacer(modifier = Modifier.width(SwingDimens.Medium))
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(CircleShape)
+                    .background(brush = gradient),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(
-                    text = displayName,
+                    text = (displayName.firstOrNull()?.uppercase() ?: "?"),
                     color = SwingWhite,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 17.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp,
                 )
-                if (isAdmin) {
-                    Spacer(Modifier.width(8.dp))
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(SwingDimens.RadiusSm))
-                            .background(SwingTeal.copy(alpha = 0.2f))
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
-                    ) {
-                        Text(
-                            text = "ADMIN",
-                            color = SwingTeal,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp,
-                        )
+            }
+            Spacer(Modifier.width(SwingDimens.Medium))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = displayName,
+                        color = SwingWhite,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false)
+                    )
+                    if (isAdmin) {
+                        Spacer(Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(SwingTeal.copy(alpha = 0.22f))
+                                .padding(horizontal = 8.dp, vertical = 3.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.settings_admin_badge),
+                                color = SwingTeal,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 10.sp,
+                                letterSpacing = 0.8.sp,
+                            )
+                        }
                     }
                 }
+                if (username.isNotBlank()) {
+                    Text(
+                        text = username,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 13.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
-            if (username.isNotBlank()) {
-                Text(
-                    text = username,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 13.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+        }
+        if (serverUrl.isNotBlank()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SwingGray)
+                    .padding(horizontal = SwingDimens.Medium, vertical = SwingDimens.Small),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(8.dp)
+                        .clip(CircleShape)
+                        .background(SwingGreen)
                 )
-            }
-            if (serverUrl.isNotBlank()) {
+                Spacer(Modifier.width(8.dp))
                 Text(
                     text = serverUrl,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    color = SwingWhite.copy(alpha = 0.8f),
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun QuickActionsRow(actions: List<QuickAction>) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = SwingDimens.Large),
+        horizontalArrangement = Arrangement.spacedBy(SwingDimens.Small)
+    ) {
+        actions.forEach { action ->
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(SwingGray5)
+                    .clickable(onClick = action.onClick)
+                    .padding(vertical = 14.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(action.accent.copy(alpha = 0.18f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(action.iconRes),
+                        contentDescription = action.label,
+                        tint = action.accent,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+                Text(
+                    text = action.label,
+                    color = SwingWhite,
                     fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -285,14 +333,39 @@ private fun SectionLabel(text: String) {
             .padding(
                 start = SwingDimens.Large,
                 end = SwingDimens.Large,
-                top = SwingDimens.Medium,
-                bottom = SwingDimens.Smaller
+                top = SwingDimens.Small,
+                bottom = SwingDimens.Smallest
             ),
         text = text.uppercase(),
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 11.sp,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 1.sp,
     )
+}
+
+@Composable
+private fun GroupedCard(items: List<SettingsItem>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = SwingDimens.Large)
+            .clip(RoundedCornerShape(20.dp))
+            .background(SwingGray5)
+    ) {
+        items.forEachIndexed { index, item ->
+            SettingsRow(item)
+            if (index < items.lastIndex) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 68.dp)
+                        .height(1.dp)
+                        .background(SwingWhite.copy(alpha = 0.08f))
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -300,17 +373,14 @@ private fun SettingsRow(item: SettingsItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = SwingDimens.Large)
-            .clip(RoundedCornerShape(SwingDimens.RadiusMd))
-            .background(SwingGray5)
             .clickable(onClick = item.onClick)
-            .padding(horizontal = SwingDimens.Medium, vertical = SwingDimens.Medium),
+            .padding(horizontal = SwingDimens.Medium, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(SwingDimens.RadiusSm))
+                .size(40.dp)
+                .clip(RoundedCornerShape(12.dp))
                 .background(item.accent.copy(alpha = 0.18f)),
             contentAlignment = Alignment.Center,
         ) {
@@ -321,7 +391,7 @@ private fun SettingsRow(item: SettingsItem) {
                 modifier = Modifier.size(20.dp),
             )
         }
-        Spacer(modifier = Modifier.width(SwingDimens.Small))
+        Spacer(Modifier.width(SwingDimens.Medium))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = item.title,
@@ -333,7 +403,35 @@ private fun SettingsRow(item: SettingsItem) {
                 text = item.subtitle,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
+        Icon(
+            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+            contentDescription = null,
+            tint = SwingWhite.copy(alpha = 0.45f),
+            modifier = Modifier.size(20.dp),
+        )
     }
+}
+
+private val settingsPalettes = listOf(
+    listOf(Color(0xFFFB923C), Color(0xFFEC4899), Color(0xFFA855F7)),
+    listOf(Color(0xFF3B82F6), Color(0xFFA855F7), Color(0xFFEC4899)),
+    listOf(Color(0xFFA855F7), Color(0xFFEC4899), Color(0xFFF472B6)),
+    listOf(Color(0xFF10B981), Color(0xFF3B82F6), Color(0xFFA855F7)),
+    listOf(Color(0xFFEF4444), Color(0xFFFB923C), Color(0xFFEC4899)),
+    listOf(Color(0xFF14B8A6), Color(0xFF22D3EE), Color(0xFF3B82F6)),
+    listOf(Color(0xFFFACC15), Color(0xFFFB923C), Color(0xFFEF4444)),
+    listOf(Color(0xFF8B5CF6), Color(0xFFEC4899), Color(0xFFFB923C)),
+)
+
+private fun gradientForName(name: String): Brush {
+    val palette = settingsPalettes[name.hashCode().absoluteValue % settingsPalettes.size]
+    return Brush.linearGradient(
+        colors = palette,
+        start = Offset(0f, 0f),
+        end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+    )
 }

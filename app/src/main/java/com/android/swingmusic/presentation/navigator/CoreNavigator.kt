@@ -12,6 +12,7 @@ import com.android.swingmusic.common.presentation.navigator.CommonNavigator
 import com.android.swingmusic.folder.presentation.screen.destinations.FoldersAndTracksScreenDestination
 import com.android.swingmusic.home.presentation.destinations.FavoritesScreenDestination
 import com.android.swingmusic.home.presentation.destinations.HomeDestination
+import com.android.swingmusic.home.presentation.destinations.LyricsScreenDestination
 import com.android.swingmusic.home.presentation.destinations.MixesScreenDestination
 import com.android.swingmusic.home.presentation.destinations.PlaylistDetailScreenDestination
 import com.android.swingmusic.home.presentation.destinations.PlaylistsScreenDestination
@@ -119,6 +120,12 @@ class CoreNavigator(
 
     override fun gotoStats() {
         navController.navigate(StatsScreenDestination.route) {
+            launchSingleTop = true
+        }
+    }
+
+    override fun gotoLyrics() {
+        navController.navigate(LyricsScreenDestination.route) {
             launchSingleTop = true
         }
     }

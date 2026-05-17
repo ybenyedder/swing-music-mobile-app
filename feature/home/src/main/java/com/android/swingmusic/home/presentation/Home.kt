@@ -39,13 +39,25 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.android.swingmusic.auth.presentation.viewmodel.AuthViewModel
 import com.android.swingmusic.common.presentation.navigator.CommonNavigator
+import com.android.swingmusic.core.data.dto.ArtistDto
+import com.android.swingmusic.core.data.dto.TrackDto
+import com.android.swingmusic.core.data.mapper.Map.toTrack
+import com.android.swingmusic.core.domain.util.QueueSource
+import com.android.swingmusic.home.presentation.library.HomeViewModel
+import com.android.swingmusic.player.presentation.event.QueueEvent
 import com.android.swingmusic.player.presentation.viewmodel.MediaControllerViewModel
 import com.android.swingmusic.uicomponent.R
 import com.android.swingmusic.uicomponent.presentation.theme.SwingBars
@@ -81,28 +93,30 @@ fun Home(
     mediaControllerViewModel: MediaControllerViewModel,
     commonNavigator: CommonNavigator,
     authViewModel: AuthViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     SideEffect {
         mediaControllerViewModel.refreshBaseUrl()
     }
 
-    val greeting = remember { greetingForHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) }
+    val homeState by homeViewModel.state.collectAsStateWithLifecycle()
+
+    val hour = remember { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
+    val greetingPair = greetingResForHour(hour)
+    val greeting = stringResource(greetingPair.first) to stringResource(greetingPair.second)
 
     val tiles = listOf(
-        BrowseTile("Albums", R.drawable.ic_album, SwingPurple) { commonNavigator.gotoAlbums() },
-        BrowseTile("Artists", R.drawable.ic_artist, SwingPink) { commonNavigator.gotoArtists() },
-        BrowseTile("Playlists", R.drawable.play_list, SwingTeal) { commonNavigator.gotoPlaylists() },
-        BrowseTile("Favorites", R.drawable.fav_filled, SwingGreen) { commonNavigator.gotoFavorites() },
-        BrowseTile("Fav. tracks", R.drawable.fav_filled, SwingPink) { commonNavigator.gotoFavorites() },
-        BrowseTile("Fav. artists", R.drawable.ic_artist, SwingPurple) { commonNavigator.gotoFavorites() },
-        BrowseTile("Fav. albums", R.drawable.ic_album, SwingHighlightBlue) { commonNavigator.gotoFavorites() },
-        BrowseTile("Stats", R.drawable.ic_artist, SwingTeal) { commonNavigator.gotoStats() },
+        BrowseTile(stringResource(R.string.nav_albums), R.drawable.ic_album, SwingPurple) { commonNavigator.gotoAlbums() },
+        BrowseTile(stringResource(R.string.nav_artists), R.drawable.ic_artist, SwingPink) { commonNavigator.gotoArtists() },
+        BrowseTile(stringResource(R.string.nav_playlists), R.drawable.play_list, SwingTeal) { commonNavigator.gotoPlaylists() },
+        BrowseTile(stringResource(R.string.nav_favorites), R.drawable.fav_filled, SwingGreen) { commonNavigator.gotoFavorites() },
+        BrowseTile(stringResource(R.string.nav_stats), R.drawable.ic_artist, SwingTeal) { commonNavigator.gotoStats() },
     )
 
     val tabs = listOf(
-        NavTab("Home", {}, selected = true),
-        NavTab("Favorites", { commonNavigator.gotoFavorites() }, selected = false),
-        NavTab("Playlists", { commonNavigator.gotoPlaylists() }, selected = false),
+        NavTab(stringResource(R.string.nav_home), {}, selected = true),
+        NavTab(stringResource(R.string.nav_favorites), { commonNavigator.gotoFavorites() }, selected = false),
+        NavTab(stringResource(R.string.nav_playlists), { commonNavigator.gotoPlaylists() }, selected = false),
     )
 
     SwingMusicTheme {
@@ -129,23 +143,47 @@ fun Home(
                 }
                 item { NavTabsRow(tabs) }
                 item { HomeGreeting(greeting) }
-                item { BrowseGrid(tiles) }
-                item { SectionHeader(title = "Recently played", action = "VIEW HISTORY") }
-                item { CirclesCarousel(count = 7, kind = CircleKind.MIXED) }
-                item { SectionHeader(title = "Top artists this week") }
-                item { CirclesCarousel(count = 7, kind = CircleKind.ARTIST) }
+                item { BrowseGrid(tiles, title = stringResource(R.string.browse_library)) }
+                if (homeState.recentlyPlayed.isNotEmpty()) {
+                    item { SectionHeader(title = stringResource(R.string.recently_played)) }
+                    item {
+                        RecentlyPlayedRow(
+                            tracks = homeState.recentlyPlayed,
+                            baseUrl = homeState.baseUrl,
+                            onClick = { index ->
+                                mediaControllerViewModel.onQueueEvent(
+                                    QueueEvent.RecreateQueue(
+                                        source = QueueSource.UNKNOWN,
+                                        queue = homeState.recentlyPlayed.map { it.toTrack() },
+                                        clickedTrackIndex = index
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
+                if (homeState.topArtists.isNotEmpty()) {
+                    item { SectionHeader(title = stringResource(R.string.top_artists_week)) }
+                    item {
+                        TopArtistsRow(
+                            artists = homeState.topArtists,
+                            baseUrl = homeState.baseUrl,
+                            onClick = { hash -> commonNavigator.gotoArtistInfo(hash) }
+                        )
+                    }
+                }
             }
         }
     }
 }
 
-private fun greetingForHour(hour: Int): Pair<String, String> {
+private fun greetingResForHour(hour: Int): Pair<Int, Int> {
     return when {
-        hour <= 3 -> "Hey there night owl" to "Late session?"
-        hour <= 5 -> "Hey there early bird" to "Early start."
-        hour <= 12 -> "Good morning" to "Pick something fresh."
-        hour <= 17 -> "Good afternoon" to "Press play."
-        else -> "Goooood evening" to "Wind down."
+        hour <= 3 -> R.string.greeting_night to R.string.greeting_night_sub
+        hour <= 5 -> R.string.greeting_early to R.string.greeting_early_sub
+        hour <= 12 -> R.string.greeting_morning to R.string.greeting_morning_sub
+        hour <= 17 -> R.string.greeting_afternoon to R.string.greeting_afternoon_sub
+        else -> R.string.greeting_evening to R.string.greeting_evening_sub
     }
 }
 
@@ -205,7 +243,7 @@ private fun WebHeader(
                 modifier = Modifier.size(16.dp)
             )
             Text(
-                text = "Start typing to search",
+                text = stringResource(R.string.search_placeholder),
                 color = SwingWhite.copy(alpha = 0.5f),
                 fontSize = 13.sp,
                 maxLines = 1,
@@ -239,7 +277,7 @@ private fun WebHeader(
                     enabled = false,
                     text = {
                         Text(
-                            text = "Hi $displayName",
+                            text = stringResource(R.string.hi_name, displayName),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -247,7 +285,7 @@ private fun WebHeader(
                     onClick = {}
                 )
                 DropdownMenuItem(
-                    text = { Text("Quick scan", color = SwingWhite) },
+                    text = { Text(stringResource(R.string.quick_scan), color = SwingWhite) },
                     trailingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_search),
@@ -259,7 +297,7 @@ private fun WebHeader(
                     onClick = { menuOpen = false }
                 )
                 DropdownMenuItem(
-                    text = { Text("Settings", color = SwingWhite) },
+                    text = { Text(stringResource(R.string.nav_settings), color = SwingWhite) },
                     trailingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_settings),
@@ -276,7 +314,7 @@ private fun WebHeader(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = "Log out",
+                            text = stringResource(R.string.log_out),
                             color = MaterialTheme.colorScheme.error,
                             fontWeight = FontWeight.SemiBold
                         )
@@ -326,7 +364,7 @@ private fun NavTabsRow(tabs: List<NavTab>) {
 private fun HomeGreeting(text: Pair<String, String>) {
     Column(modifier = Modifier.padding(horizontal = SwingDimens.Large)) {
         Text(
-            text = "Home",
+            text = stringResource(R.string.nav_home),
             color = SwingWhite,
             fontSize = 36.sp,
             fontWeight = FontWeight.SemiBold,
@@ -342,10 +380,10 @@ private fun HomeGreeting(text: Pair<String, String>) {
 }
 
 @Composable
-private fun BrowseGrid(tiles: List<BrowseTile>) {
+private fun BrowseGrid(tiles: List<BrowseTile>, title: String = "Browse Library") {
     Column(modifier = Modifier.padding(horizontal = SwingDimens.Large)) {
         Text(
-            text = "Browse Library",
+            text = title,
             color = SwingWhite,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
@@ -431,47 +469,140 @@ private fun SectionHeader(title: String, action: String? = null) {
     }
 }
 
-private enum class CircleKind { MIXED, ARTIST }
-
 @Composable
-private fun CirclesCarousel(count: Int, kind: CircleKind) {
-    val labels = remember(kind) {
-        when (kind) {
-            CircleKind.MIXED -> listOf("Mix 1", "Mix 2", "Track", "Album", "Artist", "Track", "Album")
-            CircleKind.ARTIST -> listOf("Artist 1", "Artist 2", "Artist 3", "Artist 4", "Artist 5", "Artist 6", "Artist 7")
-        }
-    }
+private fun RecentlyPlayedRow(
+    tracks: List<TrackDto>,
+    baseUrl: String,
+    onClick: (Int) -> Unit,
+) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = SwingDimens.Large),
         horizontalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
     ) {
-        items(items = labels.take(count)) { label ->
-            CircleStub(label = label)
+        items(items = tracks) { track ->
+            val index = tracks.indexOf(track)
+            TrackThumb(
+                title = track.title ?: "Unknown",
+                subtitle = track.artistsDto?.firstOrNull()?.name ?: "",
+                imageUrl = "${baseUrl}img/thumbnail/small/${track.image ?: ""}",
+                onClick = { onClick(index) }
+            )
         }
     }
 }
 
 @Composable
-private fun CircleStub(label: String) {
-    val gradient = remember(label) { gradientForName(label) }
+private fun TopArtistsRow(
+    artists: List<ArtistDto>,
+    baseUrl: String,
+    onClick: (String) -> Unit,
+) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = SwingDimens.Large),
+        horizontalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
+    ) {
+        items(items = artists) { artist ->
+            ArtistCircle(
+                name = artist.name ?: "Unknown",
+                imageUrl = "${baseUrl}img/artist/small/${artist.image ?: ""}",
+                onClick = { artist.artisthash?.let(onClick) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TrackThumb(
+    title: String,
+    subtitle: String,
+    imageUrl: String,
+    onClick: () -> Unit,
+) {
+    val context = LocalContext.current
     Column(
-        modifier = Modifier.width(96.dp),
+        modifier = Modifier
+            .width(140.dp)
+            .clip(RoundedCornerShape(SwingDimens.RadiusLg))
+            .clickable(onClick = onClick)
+            .padding(4.dp),
+        horizontalAlignment = Alignment.Start
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .size(132.dp)
+                .clip(RoundedCornerShape(SwingDimens.RadiusMd)),
+            model = ImageRequest.Builder(context)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(R.drawable.audio_fallback),
+            error = painterResource(R.drawable.audio_fallback),
+            fallback = painterResource(R.drawable.audio_fallback),
+            contentDescription = title,
+            contentScale = ContentScale.Crop,
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = title,
+            color = SwingWhite,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            lineHeight = 16.sp,
+        )
+        if (subtitle.isNotBlank()) {
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = subtitle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 11.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ArtistCircle(
+    name: String,
+    imageUrl: String,
+    onClick: () -> Unit,
+) {
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .width(108.dp)
+            .clip(RoundedCornerShape(SwingDimens.RadiusLg))
+            .clickable(onClick = onClick)
+            .padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
+        AsyncImage(
             modifier = Modifier
-                .size(88.dp)
-                .clip(CircleShape)
-                .background(brush = gradient)
+                .size(100.dp)
+                .clip(CircleShape),
+            model = ImageRequest.Builder(context)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(R.drawable.artist_fallback),
+            error = painterResource(R.drawable.artist_fallback),
+            fallback = painterResource(R.drawable.artist_fallback),
+            contentDescription = name,
+            contentScale = ContentScale.Crop,
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(10.dp))
         Text(
-            text = label,
-            color = SwingWhite.copy(alpha = 0.85f),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
+            text = name,
+            color = SwingWhite,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

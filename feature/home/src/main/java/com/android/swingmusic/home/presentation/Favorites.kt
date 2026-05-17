@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -76,8 +77,8 @@ fun FavoritesScreen(
             ) {
                 item {
                     ScreenHeader(
-                        "Favorites",
-                        "${state.items.size} tracks",
+                        stringResource(R.string.nav_favorites),
+                        stringResource(R.string.favorites_tracks_count, state.items.size),
                         R.drawable.fav_filled,
                         SwingPink
                     )
@@ -94,7 +95,7 @@ fun FavoritesScreen(
                         EmptyState(
                             iconRes = R.drawable.fav_filled,
                             iconTint = MaterialTheme.colorScheme.error,
-                            title = "Couldn't load favorites",
+                            title = stringResource(R.string.favorites_load_error),
                             subtitle = state.error.orEmpty()
                         )
                     }
@@ -160,7 +161,7 @@ private fun TrackRow(track: TrackDto, baseUrl: String, onClick: () -> Unit) {
         Spacer(Modifier.width(SwingDimens.Small))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = track.title.orEmpty().ifBlank { "Unknown" },
+                text = track.title.orEmpty().ifBlank { stringResource(R.string.unknown) },
                 color = SwingWhite,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
@@ -191,8 +192,8 @@ private fun FavoritesEmptyState() {
     EmptyState(
         iconRes = R.drawable.fav_filled,
         iconTint = SwingPink,
-        title = "Heart things to see them here",
-        subtitle = "Tap the heart on any track, album or artist to add it to your favorites.",
+        title = stringResource(R.string.favorites_empty_title),
+        subtitle = stringResource(R.string.favorites_empty_subtitle),
     )
 }
 

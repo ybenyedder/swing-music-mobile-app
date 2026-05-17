@@ -228,6 +228,10 @@ fun AlbumWithInfo(
                         contentScale = ContentScale.Crop,
                     )
 
+                    val accentColor = remember(albumInfo.color) {
+                        runCatching { androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(albumInfo.color)) }
+                            .getOrNull() ?: androidx.compose.ui.graphics.Color(0xFF1A1919)
+                    }
                     Box(
                         modifier = Modifier
                             .fillParentMaxWidth()
@@ -235,14 +239,11 @@ fun AlbumWithInfo(
                             .background(
                                 Brush.verticalGradient(
                                     colors = listOf(
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .25F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .35F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .45F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .65F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .8F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .9F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .95F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = 1F)
+                                        androidx.compose.ui.graphics.Color.Transparent,
+                                        accentColor.copy(alpha = .30F),
+                                        accentColor.copy(alpha = .55F),
+                                        MaterialTheme.colorScheme.surface.copy(alpha = .92F),
+                                        MaterialTheme.colorScheme.surface,
                                     )
                                 )
                             )
@@ -279,13 +280,8 @@ fun AlbumWithInfo(
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .size(220.dp)
-                                .clip(RoundedCornerShape(8))
-                                .shadow(elevation = 12.dp)
-                                .border(
-                                    width = (.5).dp,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = .1F),
-                                    shape = RoundedCornerShape(8)
-                                ),
+                                .shadow(elevation = 18.dp, shape = RoundedCornerShape(12.dp))
+                                .clip(RoundedCornerShape(12.dp)),
                             model = ImageRequest.Builder(LocalContext.current)
                                 .data("${baseUrl}img/thumbnail/${albumInfo.image}")
                                 .crossfade(true)

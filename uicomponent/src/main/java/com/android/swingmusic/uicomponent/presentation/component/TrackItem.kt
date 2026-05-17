@@ -2,7 +2,6 @@ package com.android.swingmusic.uicomponent.presentation.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -137,13 +136,8 @@ fun TrackItem(
                 Box(
                     modifier = Modifier
                         .padding(end = 8.dp)
-                        .clip(RoundedCornerShape(16))
-                        .size(48.dp)
-                        .border(
-                            width = (.1).dp,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = .1F),
-                            shape = RoundedCornerShape(16)
-                        ),
+                        .clip(RoundedCornerShape(10.dp))
+                        .size(48.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     val context = LocalContext.current

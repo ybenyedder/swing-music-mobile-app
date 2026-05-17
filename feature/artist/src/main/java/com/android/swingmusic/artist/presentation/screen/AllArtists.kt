@@ -5,12 +5,15 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -29,8 +32,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -46,8 +47,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -103,203 +107,219 @@ private fun AllArtists(
 
     var isGridCountMenuExpanded by remember { mutableStateOf(false) }
 
-    // TODO: Add pinch to reduce Grid count... as seen in Google Photos
-    Scaffold {
-        Scaffold(
-            modifier = Modifier.padding(it),
-            topBar = {
-                Column(verticalArrangement = Arrangement.Center) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Artists",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        IconButton(
-                            onClick = {
-                                isGridCountMenuExpanded = isGridCountMenuExpanded.not()
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = UiComponents.drawable.grid),
-                                contentDescription = "Sort Order Icon"
-                            ).also {
-                                DropdownMenu(
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                    expanded = isGridCountMenuExpanded,
-                                    onDismissRequest = {
-                                        isGridCountMenuExpanded = isGridCountMenuExpanded.not()
-                                    }
-                                ) {
-                                    Text(
-                                        text = "Grid count",
-                                        style = MaterialTheme.typography.labelMedium
-                                    )
-                                    Spacer(modifier = Modifier.height(4.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+    ) {
+        LazyVerticalGrid(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            columns = GridCells.Fixed(artistsUiState.gridCount),
+            state = gridState,
+            contentPadding = PaddingValues(top = 8.dp, bottom = 96.dp),
+        ) {
+            item(span = { GridItemSpan(artistsUiState.gridCount) }) {
+                ArtistsHeader(
+                    artistCount = artistCount,
+                    gridCount = artistsUiState.gridCount,
+                    onGridChange = onUpdateGridCount,
+                    menuExpanded = isGridCountMenuExpanded,
+                    setMenuExpanded = { isGridCountMenuExpanded = it },
+                )
+            }
 
-                                    (2..4).forEach { count ->
-                                        DropdownMenuItem(
-                                            modifier = Modifier
-                                                .clip(RoundedCornerShape(12))
-                                                .background(
-                                                    if (artistsUiState.gridCount == count)
-                                                        MaterialTheme.colorScheme.inverseSurface.copy(
-                                                            alpha = .1F
-                                                        )
-                                                    else Color.Unspecified
-                                                ),
-                                            interactionSource = MutableInteractionSource(),
-                                            onClick = {
-                                                if (artistsUiState.gridCount != count) {
-                                                    isGridCountMenuExpanded = false
-                                                    onUpdateGridCount(count)
-                                                }
-                                            }, text = {
-                                                Text(
-                                                    maxLines = 1,
-                                                    text = count.toString(),
-                                                    style = MaterialTheme.typography.titleLarge,
-                                                    color = MaterialTheme.colorScheme.inverseSurface.copy(
-                                                        alpha = .84F
-                                                    )
-                                                )
-                                            },
-                                            trailingIcon = {
-                                                if (artistsUiState.gridCount == count)
-                                                    Icon(
-                                                        modifier = Modifier.padding(start = 12.dp),
-                                                        imageVector = Icons.Rounded.CheckCircle,
-                                                        contentDescription = "Checked"
-                                                    )
-                                            }
-                                        )
-                                        if (count < 4) {
-                                            Spacer(modifier = Modifier.height(4.dp))
-                                        }
-                                    }
-                                }
+            item(span = { GridItemSpan(artistsUiState.gridCount) }) {
+                Column(modifier = Modifier.padding(top = 4.dp)) {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(50))
+                                    .background(MaterialTheme.colorScheme.onSurface)
+                                    .padding(horizontal = 14.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(UiComponents.string.sort_by),
+                                    color = MaterialTheme.colorScheme.surface,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 13.sp,
+                                )
+                            }
+                        }
+                        items(sortByPairs) { pair ->
+                            SortByChip(
+                                labelPair = pair,
+                                sortOrder = artistsUiState.sortOrder,
+                                isSelected = artistsUiState.sortBy == pair
+                            ) { clickedPair ->
+                                onSortBy(clickedPair)
                             }
                         }
                     }
-                    Text(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            bottom = 8.dp
-                        ),
-                        text = getArtistCountHelperText(artistCount),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .80F)
+                }
+            }
+
+            if (pagingArtists.loadState.refresh is LoadState.NotLoading) {
+                pagingArtists(pagingArtists) { artist ->
+                    if (artist == null) return@pagingArtists
+                    ArtistItem(
+                        modifier = Modifier.fillMaxSize(),
+                        artist = artist,
+                        baseUrl = baseUrl,
+                        onClick = { artistHash ->
+                            onNavigateToInfo(artistHash)
+                        }
                     )
                 }
-            }) { paddingValues ->
-            Surface(modifier = Modifier.padding(paddingValues)) {
 
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 8.dp),
-                    columns = GridCells.Fixed(artistsUiState.gridCount),
-                    state = gridState,
-                ) {
+                item(span = { GridItemSpan(artistsUiState.gridCount) }) {
+                    Spacer(modifier = Modifier.height(120.dp))
+                }
+            }
+
+            loadingState?.let {
+                if (!showOnRefreshIndicator) {
                     item(span = { GridItemSpan(artistsUiState.gridCount) }) {
-                        LazyRow(
-                            modifier = Modifier
-                                .padding(horizontal = 4.dp, vertical = 12.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
                         ) {
-                            items(sortByPairs) { pair ->
-                                SortByChip(
-                                    labelPair = pair,
-                                    sortOrder = artistsUiState.sortOrder,
-                                    isSelected = artistsUiState.sortBy == pair
-                                ) { clickedPair ->
-                                    onSortBy(clickedPair)
-                                }
-                                Spacer(modifier = Modifier.width(12.dp))
-                            }
-                        }
-                    }
-
-                    if (pagingArtists.loadState.refresh is LoadState.NotLoading) {
-                        pagingArtists(pagingArtists) { artist ->
-                            if (artist == null) return@pagingArtists
-                            ArtistItem(
-                                modifier = Modifier.fillMaxSize(),
-                                artist = artist,
-                                baseUrl = baseUrl,
-                                onClick = { artistHash ->
-                                    onNavigateToInfo(artistHash)
-                                }
-                            )
-                        }
-
-                        item(span = { GridItemSpan(artistsUiState.gridCount) }) {
-                            Spacer(modifier = Modifier.height(250.dp))
-                        }
-                    }
-
-                    loadingState?.let {
-                        if (!showOnRefreshIndicator) {
-                            item(span = { GridItemSpan(artistsUiState.gridCount) }) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-
-                                    Column(
-                                        modifier = Modifier
-                                            .padding(16.dp)
-                                            .fillMaxSize()
-                                            .padding(12.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(text = "Loading artists...")
-
-                                        Spacer(modifier = Modifier.height(8.dp))
-
-                                        CircularProgressIndicator()
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    errorState?.let {
-                        item(span = { GridItemSpan(artistsUiState.gridCount) }) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
+                            Column(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxSize()
+                                    .padding(12.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(16.dp)
-                                        .fillMaxSize()
-                                        .padding(12.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = it.error.message!!,
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Button(onClick = {
-                                        pagingArtists.retry()
-                                        onRetry()
-                                    }) {
-                                        Text(text = "RETRY")
-                                    }
-                                }
+                                Text(text = stringResource(UiComponents.string.artists_loading))
+                                Spacer(modifier = Modifier.height(8.dp))
+                                CircularProgressIndicator()
                             }
                         }
                     }
+                }
+            }
+
+            errorState?.let {
+                item(span = { GridItemSpan(artistsUiState.gridCount) }) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = it.error.message ?: "Error loading artists",
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(onClick = {
+                                pagingArtists.retry()
+                                onRetry()
+                            }) {
+                                Text(text = stringResource(UiComponents.string.retry))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ArtistsHeader(
+    artistCount: Int,
+    gridCount: Int,
+    onGridChange: (Int) -> Unit,
+    menuExpanded: Boolean,
+    setMenuExpanded: (Boolean) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 8.dp, top = 16.dp),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = stringResource(UiComponents.string.nav_artists),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = getArtistCountText(artistCount),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+            )
+        }
+        Box {
+            IconButton(onClick = { setMenuExpanded(!menuExpanded) }) {
+                Icon(
+                    painter = painterResource(id = UiComponents.drawable.grid),
+                    contentDescription = "Grid count",
+                )
+            }
+            DropdownMenu(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                expanded = menuExpanded,
+                onDismissRequest = { setMenuExpanded(false) }
+            ) {
+                Text(
+                    text = stringResource(UiComponents.string.grid_count),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                (2..4).forEach { count ->
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12))
+                            .background(
+                                if (gridCount == count)
+                                    MaterialTheme.colorScheme.inverseSurface.copy(alpha = .1F)
+                                else Color.Unspecified
+                            ),
+                        interactionSource = MutableInteractionSource(),
+                        onClick = {
+                            if (gridCount != count) {
+                                setMenuExpanded(false)
+                                onGridChange(count)
+                            }
+                        },
+                        text = {
+                            Text(
+                                maxLines = 1,
+                                text = count.toString(),
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.inverseSurface.copy(alpha = .84F)
+                            )
+                        },
+                        trailingIcon = {
+                            if (gridCount == count)
+                                Icon(
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    imageVector = Icons.Rounded.CheckCircle,
+                                    contentDescription = "Checked"
+                                )
+                        }
+                    )
+                    if (count < 4) Spacer(modifier = Modifier.height(4.dp))
                 }
             }
         }
@@ -337,10 +357,7 @@ fun AllArtistsScreen(
     if (pagingArtists.loadState.refresh is LoadState.NotLoading) {
         showOnRefreshIndicator = false
     }
-
-    errorState?.let {
-        showOnRefreshIndicator = false
-    }
+    errorState?.let { showOnRefreshIndicator = false }
 
     SwingMusicTheme(navBarColor = MaterialTheme.colorScheme.inverseOnSurface) {
         PullToRefreshBox(
@@ -348,7 +365,6 @@ fun AllArtistsScreen(
             state = refreshState,
             onRefresh = {
                 showOnRefreshIndicator = true
-
                 artistsViewModel.onArtistUiEvent(ArtistUiEvent.OnPullToRefresh)
             },
             indicator = {
@@ -387,15 +403,15 @@ fun AllArtistsScreen(
     }
 }
 
-private fun getArtistCountHelperText(count: Int): String {
+@Composable
+private fun getArtistCountText(count: Int): String {
     return when (count) {
-        -1 -> "Loading artists..."
-        0 -> "No artists found!"
-        1 -> "You have 1 artist in your library"
+        -1 -> stringResource(UiComponents.string.artists_loading)
+        0 -> stringResource(UiComponents.string.artists_count_zero)
+        1 -> stringResource(UiComponents.string.artists_count_one)
         else -> {
-            val formattedCount =
-                count.toString().reversed().chunked(3).joinToString(" ,").reversed()
-            "You have $formattedCount artists in your library"
+            val formattedCount = count.toString().reversed().chunked(3).joinToString(" ").reversed()
+            stringResource(UiComponents.string.artists_count_template, formattedCount)
         }
     }
 }

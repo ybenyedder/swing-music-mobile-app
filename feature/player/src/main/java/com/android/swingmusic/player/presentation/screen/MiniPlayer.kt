@@ -70,10 +70,15 @@ private fun MiniPlayer(
     var swipeDistance by remember { mutableFloatStateOf(0F) }
     val interactions = remember { MutableInteractionSource() }
 
-    Surface {
+    Surface(
+        tonalElevation = 6.dp,
+        shadowElevation = 12.dp,
+        color = MaterialTheme.colorScheme.inverseOnSurface,
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+    ) {
         Column(
             modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 .background(MaterialTheme.colorScheme.inverseOnSurface)
         ) {
             Row(
@@ -115,8 +120,8 @@ private fun MiniPlayer(
                 ) {
                     AsyncImage(
                         modifier = Modifier
-                            .size(38.dp)
-                            .clip(RoundedCornerShape(18)),
+                            .size(44.dp)
+                            .clip(RoundedCornerShape(10.dp)),
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("${baseUrl}img/thumbnail/small/${trackImage}")
                             .crossfade(true)
@@ -128,7 +133,7 @@ private fun MiniPlayer(
                         contentScale = ContentScale.Crop
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
 
                     Column {
                         Text(

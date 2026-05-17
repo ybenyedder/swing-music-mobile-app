@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,13 +44,14 @@ fun MixesScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
+                .statusBarsPadding()
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 96.dp),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
             ) {
-                item { ScreenHeader("Mixes", "Daily curated based on your taste", R.drawable.ic_album, SwingPurple) }
+                item { ScreenHeader(stringResource(R.string.nav_mixes), stringResource(R.string.mixes_subtitle), R.drawable.ic_album, SwingPurple) }
                 item { MixesEmptyState() }
             }
         }
@@ -75,14 +78,14 @@ private fun MixesEmptyState() {
         )
         Spacer(modifier = Modifier.height(SwingDimens.Medium))
         Text(
-            text = "Mixes will appear here",
+            text = stringResource(R.string.mixes_empty_title),
             color = SwingWhite,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.height(SwingDimens.Smallest))
         Text(
-            text = "Listen to a few tracks and Swing Music will curate daily mixes for you.",
+            text = stringResource(R.string.mixes_empty_subtitle),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 13.sp,
         )

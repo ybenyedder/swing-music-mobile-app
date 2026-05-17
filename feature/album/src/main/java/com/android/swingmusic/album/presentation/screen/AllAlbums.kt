@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -29,8 +31,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -47,8 +47,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -103,205 +106,216 @@ private fun AllAlbums(
     }
 
     var isGridCountMenuExpanded by remember { mutableStateOf(false) }
-  Scaffold { pv ->
-        Scaffold(
-            modifier = Modifier.padding(pv),
-            topBar = {
-                Column(verticalArrangement = Arrangement.Center) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Albums",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        IconButton(
-                            onClick = {
-                                isGridCountMenuExpanded = isGridCountMenuExpanded.not()
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = UiComponents.drawable.grid),
-                                contentDescription = "Sort Order Icon"
-                            ).also {
-                                DropdownMenu(
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                    expanded = isGridCountMenuExpanded,
-                                    onDismissRequest = {
-                                        isGridCountMenuExpanded = isGridCountMenuExpanded.not()
-                                    }
-                                ) {
-                                    Text(
-                                        text = "Grid count",
-                                        style = MaterialTheme.typography.labelMedium
-                                    )
-                                    Spacer(modifier = Modifier.height(4.dp))
 
-                                    (2..4).forEach { count ->
-                                        DropdownMenuItem(
-                                            modifier = Modifier
-                                                .clip(RoundedCornerShape(12))
-                                                .background(
-                                                    if (allAlbumsUiState.gridCount == count)
-                                                        MaterialTheme.colorScheme.inverseSurface.copy(
-                                                            alpha = .1F
-                                                        )
-                                                    else Color.Unspecified
-                                                ),
-                                            interactionSource = MutableInteractionSource(),
-                                            onClick = {
-                                                if (allAlbumsUiState.gridCount != count) {
-                                                    isGridCountMenuExpanded = false
-                                                    onUpdateGridCount(count)
-                                                }
-                                            }, text = {
-                                                Text(
-                                                    maxLines = 1,
-                                                    text = count.toString(),
-                                                    style = MaterialTheme.typography.titleLarge,
-                                                    color = MaterialTheme.colorScheme.inverseSurface.copy(
-                                                        alpha = .84F
-                                                    )
-                                                )
-                                            },
-                                            trailingIcon = {
-                                                if (allAlbumsUiState.gridCount == count)
-                                                    Icon(
-                                                        modifier = Modifier.padding(start = 12.dp),
-                                                        imageVector = Icons.Rounded.CheckCircle,
-                                                        contentDescription = "Checked"
-                                                    )
-                                            }
-                                        )
-                                        if (count < 4) {
-                                            Spacer(modifier = Modifier.height(4.dp))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    Text(
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            bottom = 8.dp
-                        ),
-                        text = getAlbumCountHelperText(albumCount),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = .80F)
-                    )
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
+    ) {
+        LazyVerticalGrid(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp),
+            columns = GridCells.Fixed(allAlbumsUiState.gridCount),
+            state = gridState,
+            contentPadding = PaddingValues(top = 8.dp, bottom = 120.dp),
+        ) {
+            item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
+                AlbumsHeader(
+                    albumCount = albumCount,
+                    gridCount = allAlbumsUiState.gridCount,
+                    menuExpanded = isGridCountMenuExpanded,
+                    setMenuExpanded = { isGridCountMenuExpanded = it },
+                    onGridChange = onUpdateGridCount,
+                )
             }
-        ) { paddingValues ->
-            Surface(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-            ) {
-                LazyVerticalGrid(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 8.dp),
-                    columns = GridCells.Fixed(allAlbumsUiState.gridCount),
-                    state = gridState,
-                ) {
-                    item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
-                        LazyRow(
-                            modifier = Modifier
-                                .padding(horizontal = 4.dp, vertical = 12.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            items(sortByPairs) { pair ->
-                                SortByChip(
-                                    labelPair = pair,
-                                    sortOrder = allAlbumsUiState.sortOrder,
-                                    isSelected = allAlbumsUiState.sortBy == pair
-                                ) { clickedPair ->
-                                    onSortBy(clickedPair)
-                                }
-                                Spacer(modifier = Modifier.width(12.dp))
-                            }
-                        }
-                    }
 
-                    if (pagingAlbums.loadState.refresh is LoadState.NotLoading) {
-                        pagingAlbums(pagingAlbums) { album ->
-                            if (album == null) return@pagingAlbums
-                            AlbumItem(
-                                modifier = Modifier.fillMaxSize(),
-                                album = album,
-                                baseUrl = baseUrl,
-                                onClick = {
-                                    onClickAlbumItem(it)
-                                }
+            item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(MaterialTheme.colorScheme.onSurface)
+                                .padding(horizontal = 14.dp, vertical = 6.dp)
+                        ) {
+                            Text(
+                                text = stringResource(UiComponents.string.sort_by),
+                                color = MaterialTheme.colorScheme.surface,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 13.sp,
                             )
                         }
-
-                        item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
-                            Spacer(modifier = Modifier.height(250.dp))
+                    }
+                    items(sortByPairs) { pair ->
+                        SortByChip(
+                            labelPair = pair,
+                            sortOrder = allAlbumsUiState.sortOrder,
+                            isSelected = allAlbumsUiState.sortBy == pair
+                        ) { clickedPair ->
+                            onSortBy(clickedPair)
                         }
                     }
+                }
+            }
 
-                    loadingState?.let {
-                        if (!showOnRefreshIndicator) {
-                            item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Column(
-                                        modifier = Modifier
-                                            .padding(16.dp)
-                                            .fillMaxSize()
-                                            .padding(12.dp),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(text = "Loading albums...")
+            if (pagingAlbums.loadState.refresh is LoadState.NotLoading) {
+                pagingAlbums(pagingAlbums) { album ->
+                    if (album == null) return@pagingAlbums
+                    AlbumItem(
+                        modifier = Modifier.fillMaxSize(),
+                        album = album,
+                        baseUrl = baseUrl,
+                        onClick = { onClickAlbumItem(it) }
+                    )
+                }
 
-                                        Spacer(modifier = Modifier.height(8.dp))
+                item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
+                    Spacer(modifier = Modifier.height(120.dp))
+                }
+            }
 
-                                        CircularProgressIndicator()
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    errorState?.let {
-                        item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
+            loadingState?.let {
+                if (!showOnRefreshIndicator) {
+                    item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .fillMaxSize()
+                                    .padding(12.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(16.dp)
-                                        .fillMaxSize()
-                                        .padding(12.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(
-                                        text = it.error.message!!,
-                                        textAlign = TextAlign.Center
-                                    )
-
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                    Button(onClick = {
-                                        pagingAlbums.retry()
-                                        onRetry()
-                                    }) {
-                                        Text(text = "RETRY")
-                                    }
-                                }
+                                Text(text = stringResource(UiComponents.string.albums_loading))
+                                Spacer(modifier = Modifier.height(8.dp))
+                                CircularProgressIndicator()
                             }
                         }
                     }
+                }
+            }
+
+            errorState?.let {
+                item(span = { GridItemSpan(allAlbumsUiState.gridCount) }) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxSize()
+                                .padding(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = it.error.message ?: "Error loading albums",
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(onClick = {
+                                pagingAlbums.retry()
+                                onRetry()
+                            }) {
+                                Text(text = stringResource(UiComponents.string.retry))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun AlbumsHeader(
+    albumCount: Int,
+    gridCount: Int,
+    menuExpanded: Boolean,
+    setMenuExpanded: (Boolean) -> Unit,
+    onGridChange: (Int) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 8.dp, top = 16.dp),
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = stringResource(UiComponents.string.nav_albums),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = getAlbumCountText(albumCount),
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .65f),
+            )
+        }
+        Box {
+            IconButton(onClick = { setMenuExpanded(!menuExpanded) }) {
+                Icon(
+                    painter = painterResource(id = UiComponents.drawable.grid),
+                    contentDescription = "Grid count",
+                )
+            }
+            DropdownMenu(
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                expanded = menuExpanded,
+                onDismissRequest = { setMenuExpanded(false) }
+            ) {
+                Text(
+                    text = stringResource(UiComponents.string.grid_count),
+                    style = MaterialTheme.typography.labelMedium
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                (2..4).forEach { count ->
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(12))
+                            .background(
+                                if (gridCount == count)
+                                    MaterialTheme.colorScheme.inverseSurface.copy(alpha = .1F)
+                                else Color.Unspecified
+                            ),
+                        interactionSource = MutableInteractionSource(),
+                        onClick = {
+                            if (gridCount != count) {
+                                setMenuExpanded(false)
+                                onGridChange(count)
+                            }
+                        },
+                        text = {
+                            Text(
+                                maxLines = 1,
+                                text = count.toString(),
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.inverseSurface.copy(alpha = .84F)
+                            )
+                        },
+                        trailingIcon = {
+                            if (gridCount == count)
+                                Icon(
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    imageVector = Icons.Rounded.CheckCircle,
+                                    contentDescription = "Checked"
+                                )
+                        }
+                    )
+                    if (count < 4) Spacer(modifier = Modifier.height(4.dp))
                 }
             }
         }
@@ -384,15 +398,15 @@ fun AllAlbumScreen(
     }
 }
 
-private fun getAlbumCountHelperText(count: Int): String {
+@Composable
+private fun getAlbumCountText(count: Int): String {
     return when (count) {
-        -1 -> "Loading albums..."
-        0 -> "No albums found!"
-        1 -> "You have 1 album in your library"
+        -1 -> stringResource(UiComponents.string.albums_loading)
+        0 -> stringResource(UiComponents.string.albums_count_zero)
+        1 -> stringResource(UiComponents.string.albums_count_one)
         else -> {
-            val formattedCount =
-                count.toString().reversed().chunked(3).joinToString(" ,").reversed()
-            "You have $formattedCount albums in your library"
+            val formattedCount = count.toString().reversed().chunked(3).joinToString(" ").reversed()
+            stringResource(UiComponents.string.albums_count_template, formattedCount)
         }
     }
 }

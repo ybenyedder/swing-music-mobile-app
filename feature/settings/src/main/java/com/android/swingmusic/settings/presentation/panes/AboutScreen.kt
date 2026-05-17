@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -63,7 +64,7 @@ fun AboutScreen(commonNavigator: CommonNavigator) {
                 item {
                     Text(
                         modifier = Modifier.padding(horizontal = SwingDimens.Large),
-                        text = "About",
+                        text = stringResource(R.string.about_title),
                         color = SwingWhite,
                         fontSize = 28.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -103,7 +104,7 @@ fun AboutScreen(commonNavigator: CommonNavigator) {
                         )
                         Spacer(Modifier.height(2.dp))
                         Text(
-                            text = "Android client",
+                            text = stringResource(R.string.about_client),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 13.sp,
                         )
@@ -119,7 +120,7 @@ fun AboutScreen(commonNavigator: CommonNavigator) {
                 item { Spacer(modifier = Modifier.height(SwingDimens.Medium)) }
                 item {
                     LinkRow(
-                        title = "Server source code",
+                        title = stringResource(R.string.about_server_source),
                         subtitle = "github.com/swingmx/swingmusic",
                         iconRes = R.drawable.swing_music_logo_outlined,
                     ) {
@@ -128,7 +129,7 @@ fun AboutScreen(commonNavigator: CommonNavigator) {
                 }
                 item {
                     LinkRow(
-                        title = "Android client",
+                        title = stringResource(R.string.about_client_source),
                         subtitle = "github.com/CyperKnight/SwingMusic-Android",
                         iconRes = R.drawable.swing_music_logo_outlined,
                     ) {

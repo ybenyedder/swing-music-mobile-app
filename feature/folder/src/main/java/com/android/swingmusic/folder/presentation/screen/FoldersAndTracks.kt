@@ -87,6 +87,7 @@ private fun FoldersAndTracks(
     onToggleTrackFavorite: (trackHash: String, isFavorite: Boolean) -> Unit,
     onGetSheetAction: (track: Track, sheetAction: BottomSheetAction) -> Unit,
     onGotoArtist: (hash: String) -> Unit,
+    onConfigureRoot: () -> Unit,
     baseUrl: String,
     isManualRefreshing: Boolean,
     onManualRefreshingChange: (Boolean) -> Unit
@@ -452,9 +453,8 @@ private fun FoldersAndTracks(
                                     Spacer(modifier = Modifier.height(24.dp))
 
                                     if (currentFolder.path == "\$home") {
-                                        Button(onClick = {
-                                        }) {
-                                            Text("Configure Root Directory")
+                                        Button(onClick = { onConfigureRoot() }) {
+                                            Text(androidx.compose.ui.res.stringResource(com.android.swingmusic.uicomponent.R.string.folders_configure_root))
                                         }
                                     } else {
                                         OutlinedButton(onClick = {
@@ -641,6 +641,7 @@ fun FoldersAndTracksScreen(
         onGotoArtist = { hash ->
             navigator.gotoArtistInfo(hash)
         },
+        onConfigureRoot = { navigator.gotoSettings() },
         baseUrl = baseUrl ?: ""
     )
 }

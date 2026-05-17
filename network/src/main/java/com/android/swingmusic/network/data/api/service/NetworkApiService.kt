@@ -185,4 +185,24 @@ interface NetworkApiService {
         @Url url: String,
         @Header("Authorization") bearerToken: String,
     ): PlaylistTracksResponseDto
+
+    @GET
+    suspend fun getRecentlyPlayedTracks(
+        @Url url: String,
+        @Header("Authorization") bearerToken: String,
+        @Query("limit") limit: Int = 10,
+        @Query("start") start: Int = 0,
+        @Query("sortby") sortBy: String = "lastplayed",
+        @Query("reverse") reverse: Int = 1
+    ): FavoriteTracksResponseDto
+
+    @GET
+    suspend fun getTopArtists(
+        @Url url: String,
+        @Header("Authorization") bearerToken: String,
+        @Query("limit") limit: Int = 10,
+        @Query("start") start: Int = 0,
+        @Query("sortby") sortBy: String = "playcount",
+        @Query("reverse") reverse: Int = 1
+    ): AllArtistsDto
 }

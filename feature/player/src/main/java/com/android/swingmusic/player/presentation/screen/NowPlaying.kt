@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
@@ -622,7 +623,7 @@ private fun NowPlaying(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 PlayerBottomAction(
-                    label = "Lyrics",
+                    label = stringResource(R.string.player_lyrics),
                     painterId = R.drawable.lyrics_icon,
                     tint = SwingGray1,
                     onClick = {
@@ -631,21 +632,21 @@ private fun NowPlaying(
                 )
 
                 PlayerBottomAction(
-                    label = "Repeat",
+                    label = stringResource(R.string.player_repeat),
                     painterId = repeatModeIcon,
                     tint = if (repeatMode == RepeatMode.REPEAT_OFF) SwingGray4 else SwingHighlightBlue,
                     onClick = { onToggleRepeatMode(repeatMode) }
                 )
 
                 PlayerBottomAction(
-                    label = "Queue",
+                    label = stringResource(R.string.player_queue),
                     painterId = R.drawable.play_list,
                     tint = SwingWhite,
                     onClick = { onClickQueueIcon() }
                 )
 
                 PlayerBottomAction(
-                    label = "Shuffle",
+                    label = stringResource(R.string.player_shuffle),
                     painterId = R.drawable.shuffle,
                     tint = if (shuffleMode == ShuffleMode.SHUFFLE_OFF) SwingGray4 else SwingHighlightBlue,
                     onClick = { onToggleShuffleMode(shuffleMode) }
@@ -768,9 +769,7 @@ fun NowPlayingScreen(
             )
         },
         onClickLyricsIcon = {
-            mediaControllerViewModel.onPlayerUiEvent(
-                PlayerUiEvent.OnClickLyricsIcon
-            )
+            navigator.gotoLyrics()
         },
         onToggleFavorite = { isFavorite, trackHash ->
             mediaControllerViewModel.onPlayerUiEvent(

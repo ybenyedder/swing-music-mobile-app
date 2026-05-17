@@ -238,6 +238,13 @@ private fun ArtistInfo(
                         contentScale = ContentScale.Crop,
                     )
 
+                    val accentColor: androidx.compose.ui.graphics.Color = remember(artistInfo.artist.color) {
+                        val hex = artistInfo.artist.color
+                        val parsed: androidx.compose.ui.graphics.Color? = runCatching {
+                            androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(hex))
+                        }.getOrNull()
+                        parsed ?: androidx.compose.ui.graphics.Color(0xFF1A1919)
+                    }
                     Box(
                         modifier = Modifier
                             .fillParentMaxWidth()
@@ -245,14 +252,11 @@ private fun ArtistInfo(
                             .background(
                                 Brush.verticalGradient(
                                     colors = listOf(
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .15F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .25F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .35F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .45F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .6F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .9F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = .95F),
-                                        MaterialTheme.colorScheme.surface.copy(alpha = 1F)
+                                        androidx.compose.ui.graphics.Color.Transparent,
+                                        accentColor.copy(alpha = .35F),
+                                        accentColor.copy(alpha = .65F),
+                                        MaterialTheme.colorScheme.surface.copy(alpha = .92F),
+                                        MaterialTheme.colorScheme.surface,
                                     )
                                 )
                             )

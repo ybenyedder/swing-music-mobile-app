@@ -126,8 +126,8 @@ fun PlaylistDetailScreen(
                         EmptyState(
                             iconRes = R.drawable.play_list,
                             iconTint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            title = "Empty playlist",
-                            subtitle = "This playlist has no tracks yet.",
+                            title = androidx.compose.ui.res.stringResource(R.string.playlist_empty_title),
+                            subtitle = androidx.compose.ui.res.stringResource(R.string.playlist_empty_subtitle),
                         )
                     }
                     else -> itemsIndexed(

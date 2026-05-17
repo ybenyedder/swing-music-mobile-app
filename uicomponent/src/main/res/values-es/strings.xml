@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">Inicio</string>
+    <string name="nav_library">Biblioteca</string>
+    <string name="nav_albums">Álbumes</string>
+    <string name="nav_artists">Artistas</string>
+    <string name="nav_playlists">Listas</string>
+    <string name="nav_favorites">Favoritos</string>
+    <string name="nav_stats">Estadísticas</string>
+    <string name="nav_mixes">Mixes</string>
+    <string name="nav_lyrics">Letras</string>
+    <string name="nav_settings">Ajustes</string>
+    <string name="nav_search">Buscar</string>
+    <string name="nav_about">Acerca de</string>
+    <string name="nav_accounts">Cuentas</string>
+    <string name="nav_folders">Carpetas</string>
+    <string name="nav_appearance">Apariencia</string>
+    <string name="nav_pair">Vincular</string>
+    <string name="nav_theme">Tema</string>
+
+    <string name="search_placeholder">Buscar</string>
+    <string name="hi_name">Hola %1$s</string>
+    <string name="quick_scan">Escaneo rápido</string>
+    <string name="log_out">Cerrar sesión</string>
+    <string name="browse_library">Explorar biblioteca</string>
+    <string name="recently_played">Escuchado recientemente</string>
+    <string name="top_artists_week">Top artistas esta semana</string>
+    <string name="view_all">VER TODO</string>
+    <string name="view_history">HISTORIAL</string>
+
+    <string name="greeting_night">Hola, búho nocturno</string>
+    <string name="greeting_night_sub">¿Sesión nocturna?</string>
+    <string name="greeting_early">Hola, madrugador</string>
+    <string name="greeting_early_sub">Arranque temprano.</string>
+    <string name="greeting_morning">Buenos días</string>
+    <string name="greeting_morning_sub">Elige algo fresco.</string>
+    <string name="greeting_afternoon">Buenas tardes</string>
+    <string name="greeting_afternoon_sub">Dale a reproducir.</string>
+    <string name="greeting_evening">Buenas noches</string>
+    <string name="greeting_evening_sub">Relájate.</string>
+
+    <string name="stats_artists">Artistas</string>
+    <string name="stats_albums">Álbumes</string>
+    <string name="stats_favorites">Favoritos</string>
+    <string name="stats_top_artist">Top artista</string>
+    <string name="stats_subtitle_hero">Tu biblioteca en un vistazo</string>
+    <string name="stats_items_tracked">%1$d elementos seguidos</string>
+
+    <string name="lyrics_subtitle">Letras sincronizadas para la pista actual</string>
+    <string name="lyrics_no_track">No hay pista en reproducción</string>
+    <string name="lyrics_none">No se han encontrado letras</string>
+    <string name="lyrics_provided_by">Letras de lrclib.net</string>
+
+    <string name="favorites_tracks_count">%1$d pistas</string>
+    <string name="favorites_load_error">No se pueden cargar los favoritos</string>
+    <string name="favorites_empty_title">Marca con corazón para verlo aquí</string>
+    <string name="favorites_empty_subtitle">Pulsa el corazón en una pista, álbum o artista para añadirlo.</string>
+
+    <string name="playlists_load_error">No se pueden cargar las listas</string>
+    <string name="playlists_empty_title">Aún no hay listas</string>
+    <string name="playlists_empty_subtitle">Crea una lista desde el cliente web y aparecerá aquí.</string>
+    <string name="playlist_tracks_count">%1$d pistas</string>
+    <string name="playlist_untitled">Sin título</string>
+    <string name="playlist_empty_title">Lista vacía</string>
+    <string name="playlist_empty_subtitle">No hay pistas en esta lista.</string>
+
+    <string name="mixes_subtitle">Selecciones diarias según tus gustos</string>
+    <string name="mixes_empty_title">Tus mixes aparecerán aquí</string>
+    <string name="mixes_empty_subtitle">Escucha algunas pistas y Swing Music creará mixes diarios.</string>
+
+    <string name="welcome_title">Bienvenido a Swing Music</string>
+    <string name="welcome_subtitle">Tu servidor de streaming auto-hospedado, ahora en Android.</string>
+    <string name="onboarding_step1">1. Ejecuta el servidor Swing Music en tu equipo.</string>
+    <string name="onboarding_step2">2. Abre el cliente web y ve a Ajustes → Vincular dispositivo.</string>
+    <string name="onboarding_step3">3. Escanea el código QR o introduce la URL manualmente.</string>
+    <string name="onboarding_scan_qr">Escanear QR</string>
+    <string name="onboarding_signin">Iniciar sesión con usuario</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_section_library">Biblioteca</string>
+    <string name="settings_section_audio">Audio y extensiones</string>
+    <string name="settings_section_account">Cuenta</string>
+    <string name="settings_section_admin">Administración</string>
+    <string name="settings_folders_sub">Directorios raíz y opciones de visualización</string>
+    <string name="settings_albums_sub">Cuadrícula y orden</string>
+    <string name="settings_artists_sub">Cuadrícula y orden</string>
+    <string name="settings_stats_sub">Tu biblioteca en un vistazo</string>
+    <string name="settings_lyrics_sub">Letras sincronizadas vía lrclib.net</string>
+    <string name="settings_playback_sub">Crossfade, gapless (próximamente)</string>
+    <string name="settings_lastfm_sub">Scrobbling (próximamente)</string>
+    <string name="settings_accounts_sub">Cambiar o añadir cuentas</string>
+    <string name="settings_appearance_sub">Barra lateral, modo lista, cabecera</string>
+    <string name="settings_about_sub">Versión, registro, enlaces</string>
+    <string name="settings_manage_users">Gestionar usuarios</string>
+    <string name="settings_manage_users_sub">Crear cuentas y asignar roles</string>
+    <string name="settings_admin_badge">ADMIN</string>
+
+    <string name="about_title">Acerca de</string>
+    <string name="about_client">Cliente Android</string>
+    <string name="about_server_source">Código fuente del servidor</string>
+    <string name="about_client_source">Cliente Android</string>
+
+    <string name="appearance_title">Apariencia</string>
+    <string name="appearance_theme_name">Tema Swing</string>
+    <string name="appearance_theme_sub">Modo oscuro por defecto, acentos dinámicos según las portadas.</string>
+    <string name="appearance_coming_soon">PRÓXIMAMENTE</string>
+    <string name="appearance_feature_themes">Tema claro / oscuro / automático</string>
+    <string name="appearance_feature_accent">Color de acento personalizado</string>
+    <string name="appearance_feature_density">Densidad de pantalla (compacta / cómoda)</string>
+    <string name="appearance_feature_artist_shape">Forma de las portadas de artista (círculo / cuadrado)</string>
+
+    <string name="sort_by">Ordenar por</string>
+    <string name="artists_count_template">Tienes %1$s artistas en tu biblioteca</string>
+    <string name="artists_count_one">Tienes 1 artista en tu biblioteca</string>
+    <string name="artists_count_zero">Sin artistas</string>
+    <string name="artists_loading">Cargando artistas…</string>
+    <string name="albums_count_template">Tienes %1$s álbumes en tu biblioteca</string>
+    <string name="albums_count_one">Tienes 1 álbum en tu biblioteca</string>
+    <string name="albums_count_zero">Sin álbumes</string>
+    <string name="albums_loading">Cargando álbumes…</string>
+    <string name="grid_count">Columnas</string>
+    <string name="retry">REINTENTAR</string>
+
+    <string name="player_lyrics">Letras</string>
+    <string name="player_repeat">Repetir</string>
+    <string name="player_queue">Cola</string>
+    <string name="player_shuffle">Aleatorio</string>
+    <string name="player_now_playing">Reproduciendo</string>
+    <string name="player_queue_empty">Cola vacía</string>
+
+    <string name="folders_title">Carpetas</string>
+    <string name="folders_empty">Esta carpeta está vacía.</string>
+    <string name="folders_configure_root">Configurar carpeta raíz</string>
+
+    <string name="sheet_goto_artist">Ver artista</string>
+    <string name="sheet_goto_album">Ver álbum</string>
+    <string name="sheet_goto_folder">Ver carpeta</string>
+    <string name="sheet_play_next">Reproducir después</string>
+    <string name="sheet_add_to_queue">Añadir a la cola</string>
+
+    <string name="loading">Cargando…</string>
+    <string name="not_logged_in">No has iniciado sesión</string>
+    <string name="unknown">Desconocido</string>
+</resources>

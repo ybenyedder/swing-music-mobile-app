@@ -26,6 +26,8 @@ interface CommonNavigator {
 
     fun gotoStats()
 
+    fun gotoLyrics()
+
     fun gotoMixes()
 
     fun gotoAlbumWithInfo(albumHash: String)
