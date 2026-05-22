@@ -11,6 +11,7 @@ import com.android.swingmusic.auth.presentation.screen.destinations.LoginWithUse
 import com.android.swingmusic.common.presentation.navigator.CommonNavigator
 import com.android.swingmusic.folder.presentation.screen.destinations.FoldersAndTracksScreenDestination
 import com.android.swingmusic.home.presentation.destinations.FavoritesScreenDestination
+import com.android.swingmusic.home.presentation.destinations.HistoryScreenDestination
 import com.android.swingmusic.home.presentation.destinations.HomeDestination
 import com.android.swingmusic.home.presentation.destinations.LyricsScreenDestination
 import com.android.swingmusic.home.presentation.destinations.MixesScreenDestination
@@ -132,6 +133,12 @@ class CoreNavigator(
 
     override fun gotoMixes() {
         navController.navigate(MixesScreenDestination.route) {
+            launchSingleTop = true
+        }
+    }
+
+    override fun gotoHistory() {
+        navController.navigate(HistoryScreenDestination.route) {
             launchSingleTop = true
         }
     }

@@ -30,6 +30,8 @@ interface CommonNavigator {
 
     fun gotoMixes()
 
+    fun gotoHistory()
+
     fun gotoAlbumWithInfo(albumHash: String)
 
     fun navigateBack()

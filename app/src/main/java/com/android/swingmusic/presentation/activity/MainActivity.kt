@@ -57,6 +57,7 @@ import com.android.swingmusic.auth.presentation.screen.destinations.LoginWithQrC
 import com.android.swingmusic.auth.presentation.screen.destinations.LoginWithUsernameScreenDestination
 import com.android.swingmusic.auth.presentation.viewmodel.AuthViewModel
 import com.android.swingmusic.home.presentation.destinations.FavoritesScreenDestination
+import com.android.swingmusic.home.presentation.destinations.HistoryScreenDestination
 import com.android.swingmusic.home.presentation.destinations.HomeDestination
 import com.android.swingmusic.home.presentation.destinations.LyricsScreenDestination
 import com.android.swingmusic.home.presentation.destinations.PlaylistDetailScreenDestination
@@ -170,6 +171,7 @@ class MainActivity : ComponentActivity() {
                 PlaylistDetailScreenDestination.route,
                 SearchScreenDestination.route,
                 LyricsScreenDestination.route,
+                HistoryScreenDestination.route,
             )
             val showTopBar = showBottomNav && route !in noTopBarRoutes
 

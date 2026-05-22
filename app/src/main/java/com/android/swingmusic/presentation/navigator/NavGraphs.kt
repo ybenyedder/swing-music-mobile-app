@@ -9,6 +9,7 @@ import com.android.swingmusic.auth.presentation.screen.destinations.LoginWithQrC
 import com.android.swingmusic.auth.presentation.screen.destinations.LoginWithUsernameScreenDestination
 import com.android.swingmusic.folder.presentation.screen.destinations.FoldersAndTracksScreenDestination
 import com.android.swingmusic.home.presentation.destinations.FavoritesScreenDestination
+import com.android.swingmusic.home.presentation.destinations.HistoryScreenDestination
 import com.android.swingmusic.home.presentation.destinations.HomeDestination
 import com.android.swingmusic.home.presentation.destinations.LyricsScreenDestination
 import com.android.swingmusic.home.presentation.destinations.MixesScreenDestination
@@ -64,6 +65,7 @@ object NavGraphs {
                     SettingsScreenDestination,
                     StatsScreenDestination,
                     MixesScreenDestination,
+                    HistoryScreenDestination,
                     LyricsScreenDestination,
                     OnboardingScreenDestination,
                     AccountsScreenDestination,

@@ -10,6 +10,7 @@
     <string name="nav_stats">Stats</string>
     <string name="nav_mixes">Mixes</string>
     <string name="nav_lyrics">Lyrics</string>
+    <string name="nav_history">History</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_search">Search</string>
     <string name="nav_about">About</string>
@@ -59,6 +60,11 @@
     <!-- Search -->
     <string name="search_empty_title">Search for music</string>
     <string name="search_empty_subtitle">Find tracks, artists and albums</string>
+
+    <!-- History -->
+    <string name="history_subtitle">Tracks you played recently</string>
+    <string name="history_empty_title">No history yet</string>
+    <string name="history_empty_subtitle">Play some tracks and they will show up here.</string>
 
     <!-- Favorites -->
     <string name="favorites_tracks_count">%1$d tracks</string>

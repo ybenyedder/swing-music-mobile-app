@@ -9,6 +9,7 @@
     <string name="nav_stats">Estadísticas</string>
     <string name="nav_mixes">Mixes</string>
     <string name="nav_lyrics">Letras</string>
+    <string name="nav_history">Historial</string>
     <string name="nav_settings">Ajustes</string>
     <string name="nav_search">Buscar</string>
     <string name="nav_about">Acerca de</string>
@@ -54,6 +55,11 @@
     <!-- Búsqueda -->
     <string name="search_empty_title">Buscar música</string>
     <string name="search_empty_subtitle">Encuentra canciones, artistas y álbumes</string>
+
+    <!-- Historial -->
+    <string name="history_subtitle">Las canciones que escuchaste recientemente</string>
+    <string name="history_empty_title">Sin historial todavía</string>
+    <string name="history_empty_subtitle">Reproduce algunas canciones y aparecerán aquí.</string>
 
     <string name="favorites_tracks_count">%1$d pistas</string>
     <string name="favorites_load_error">No se pueden cargar los favoritos</string>

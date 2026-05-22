@@ -111,6 +111,7 @@ fun Home(
         BrowseTile(stringResource(R.string.nav_playlists), R.drawable.play_list, SwingTeal) { commonNavigator.gotoPlaylists() },
         BrowseTile(stringResource(R.string.nav_favorites), R.drawable.fav_filled, SwingGreen) { commonNavigator.gotoFavorites() },
         BrowseTile(stringResource(R.string.nav_stats), R.drawable.ic_artist, SwingTeal) { commonNavigator.gotoStats() },
+        BrowseTile(stringResource(R.string.nav_history), R.drawable.ic_history, SwingHighlightBlue) { commonNavigator.gotoHistory() },
     )
 
     val tabs = listOf(
@@ -145,7 +146,13 @@ fun Home(
                 item { HomeGreeting(greeting) }
                 item { BrowseGrid(tiles, title = stringResource(R.string.browse_library)) }
                 if (homeState.recentlyPlayed.isNotEmpty()) {
-                    item { SectionHeader(title = stringResource(R.string.recently_played)) }
+                    item {
+                        SectionHeader(
+                            title = stringResource(R.string.recently_played),
+                            action = stringResource(R.string.view_all),
+                            onActionClick = { commonNavigator.gotoHistory() }
+                        )
+                    }
                     item {
                         RecentlyPlayedRow(
                             tracks = homeState.recentlyPlayed,
@@ -443,7 +450,11 @@ private fun BrowseTileCard(tile: BrowseTile, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun SectionHeader(title: String, action: String? = null) {
+private fun SectionHeader(
+    title: String,
+    action: String? = null,
+    onActionClick: (() -> Unit)? = null,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -463,7 +474,10 @@ private fun SectionHeader(title: String, action: String? = null) {
                 color = SwingHighlightBlue,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 11.sp,
-                letterSpacing = 1.sp
+                letterSpacing = 1.sp,
+                modifier = if (onActionClick != null) {
+                    Modifier.clickable { onActionClick() }
+                } else Modifier
             )
         }
     }

@@ -193,6 +193,50 @@ class HomeViewModel @Inject constructor(
     }
 }
 
+@HiltViewModel
+class HistoryViewModel @Inject constructor(
+    private val networkApiService: NetworkApiService,
+    private val authRepository: AuthRepository,
+) : ViewModel() {
+
+    private val _state = MutableStateFlow(LibraryListState<TrackDto>())
+    val state: StateFlow<LibraryListState<TrackDto>> = _state.asStateFlow()
+
+    init { refresh() }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true, error = null) }
+            val baseUrl = (BaseUrlHolder.baseUrl ?: authRepository.getBaseUrl())?.trimEnd('/')
+            val token = AuthTokenHolder.accessToken ?: authRepository.getAccessToken()
+            if (baseUrl.isNullOrBlank() || token.isNullOrBlank()) {
+                _state.update { it.copy(isLoading = false, error = "Not logged in") }
+                return@launch
+            }
+            try {
+                val res = networkApiService.getRecentlyPlayedTracks(
+                    url = "$baseUrl/getall/tracks",
+                    bearerToken = "Bearer $token",
+                    limit = 100,
+                )
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        items = res.tracks.orEmpty(),
+                        baseUrl = "$baseUrl/",
+                        error = null,
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.tag("HISTORY").e(e, "fetch failed")
+                _state.update {
+                    it.copy(isLoading = false, error = e.message ?: "Failed to load history")
+                }
+            }
+        }
+    }
+}
+
 data class StatsState(
     val isLoading: Boolean = false,
     val totalArtists: Int = 0,
