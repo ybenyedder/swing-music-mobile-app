@@ -51,6 +51,10 @@
     <string name="lyrics_none">No se han encontrado letras</string>
     <string name="lyrics_provided_by">Letras de lrclib.net</string>
 
+    <!-- Búsqueda -->
+    <string name="search_empty_title">Buscar música</string>
+    <string name="search_empty_subtitle">Encuentra canciones, artistas y álbumes</string>
+
     <string name="favorites_tracks_count">%1$d pistas</string>
     <string name="favorites_load_error">No se pueden cargar los favoritos</string>
     <string name="favorites_empty_title">Marca con corazón para verlo aquí</string>

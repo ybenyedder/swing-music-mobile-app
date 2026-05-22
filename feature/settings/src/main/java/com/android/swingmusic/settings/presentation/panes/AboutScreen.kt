@@ -58,7 +58,7 @@ fun AboutScreen(commonNavigator: CommonNavigator) {
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 80.dp, bottom = 96.dp),
+                contentPadding = PaddingValues(top = 80.dp, bottom = SwingDimens.BottomBarSpace),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Small)
             ) {
                 item {

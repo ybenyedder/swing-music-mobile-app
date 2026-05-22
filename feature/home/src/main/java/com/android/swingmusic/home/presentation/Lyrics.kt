@@ -88,7 +88,7 @@ fun LyricsScreen(
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 120.dp),
+                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = SwingDimens.BottomBarSpace),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 item {

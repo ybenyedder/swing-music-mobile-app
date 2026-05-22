@@ -56,6 +56,10 @@
     <string name="lyrics_none">No lyrics found</string>
     <string name="lyrics_provided_by">Lyrics by lrclib.net</string>
 
+    <!-- Search -->
+    <string name="search_empty_title">Search for music</string>
+    <string name="search_empty_subtitle">Find tracks, artists and albums</string>
+
     <!-- Favorites -->
     <string name="favorites_tracks_count">%1$d tracks</string>
     <string name="favorites_load_error">Couldn\'t load favorites</string>

@@ -130,7 +130,7 @@ fun Home(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
                     top = SwingDimens.Large,
-                    bottom = 120.dp
+                    bottom = SwingDimens.BottomBarSpace
                 ),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Large)
             ) {

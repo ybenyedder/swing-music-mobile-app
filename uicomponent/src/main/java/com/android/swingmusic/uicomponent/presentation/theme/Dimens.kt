@@ -20,6 +20,7 @@ object SwingDimens {
     val CardWidth = 172.dp       // 10.75rem
     val ContentPadTop = 16.dp
     val ContentPadBottom = 64.dp // $padbottom 4rem
+    val BottomBarSpace = 200.dp  // mini-player + spacer + nav bar + system nav inset
     val PadLeft = 32.dp          // approximated from web's clamp(2rem, ..., 5rem)
     val PadRight = 32.dp
 

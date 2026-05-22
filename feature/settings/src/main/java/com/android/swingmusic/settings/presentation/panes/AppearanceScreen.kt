@@ -51,7 +51,7 @@ fun AppearanceScreen(commonNavigator: CommonNavigator) {
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 120.dp),
+                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = SwingDimens.BottomBarSpace),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
             ) {
                 item {

@@ -51,6 +51,10 @@
     <string name="lyrics_none">Pas de paroles disponibles</string>
     <string name="lyrics_provided_by">Paroles fournies par lrclib.net</string>
 
+    <!-- Recherche -->
+    <string name="search_empty_title">Rechercher de la musique</string>
+    <string name="search_empty_subtitle">Trouvez des titres, artistes et albums</string>
+
     <string name="favorites_tracks_count">%1$d pistes</string>
     <string name="favorites_load_error">Impossible de charger les favoris</string>
     <string name="favorites_empty_title">Aimez pour voir ici</string>

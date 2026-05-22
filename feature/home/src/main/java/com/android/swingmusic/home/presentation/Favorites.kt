@@ -72,7 +72,7 @@ fun FavoritesScreen(
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 96.dp),
+                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = SwingDimens.BottomBarSpace),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Small)
             ) {
                 item {

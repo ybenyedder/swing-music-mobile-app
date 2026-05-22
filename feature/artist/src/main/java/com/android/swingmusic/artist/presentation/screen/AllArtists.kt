@@ -68,6 +68,7 @@ import com.android.swingmusic.core.domain.model.Artist
 import com.android.swingmusic.core.domain.util.SortBy
 import com.android.swingmusic.uicomponent.presentation.component.ArtistItem
 import com.android.swingmusic.uicomponent.presentation.component.SortByChip
+import com.android.swingmusic.uicomponent.presentation.theme.SwingDimens
 import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.android.swingmusic.uicomponent.R as UiComponents
@@ -119,7 +120,7 @@ private fun AllArtists(
                 .padding(horizontal = 8.dp),
             columns = GridCells.Fixed(artistsUiState.gridCount),
             state = gridState,
-            contentPadding = PaddingValues(top = 8.dp, bottom = 96.dp),
+            contentPadding = PaddingValues(top = 8.dp, bottom = SwingDimens.BottomBarSpace),
         ) {
             item(span = { GridItemSpan(artistsUiState.gridCount) }) {
                 ArtistsHeader(

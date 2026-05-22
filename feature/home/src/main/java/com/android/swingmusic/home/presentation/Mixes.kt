@@ -48,7 +48,7 @@ fun MixesScreen() {
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = 96.dp),
+                contentPadding = PaddingValues(top = SwingDimens.Large, bottom = SwingDimens.BottomBarSpace),
                 verticalArrangement = Arrangement.spacedBy(SwingDimens.Medium)
             ) {
                 item { ScreenHeader(stringResource(R.string.nav_mixes), stringResource(R.string.mixes_subtitle), R.drawable.ic_album, SwingPurple) }

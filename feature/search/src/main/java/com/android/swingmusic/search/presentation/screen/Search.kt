@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,7 +55,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.swingmusic.artist.presentation.event.ArtistInfoUiEvent
@@ -81,6 +84,7 @@ import com.android.swingmusic.uicomponent.presentation.component.ArtistItem
 import com.android.swingmusic.uicomponent.presentation.component.CustomTrackBottomSheet
 import com.android.swingmusic.uicomponent.presentation.component.TopSearchResultItem
 import com.android.swingmusic.uicomponent.presentation.component.TrackItem
+import com.android.swingmusic.uicomponent.presentation.theme.SwingDimens
 import com.android.swingmusic.uicomponent.presentation.theme.SwingMusicTheme
 import com.android.swingmusic.uicomponent.presentation.util.Screen
 import com.ramcosta.composedestinations.annotation.Destination
@@ -240,12 +244,58 @@ private fun Search(
                     }
                 }
 
+                (searchParams.isBlank() &&
+                        topResultItem == null &&
+                        topSearchTracks.isEmpty() &&
+                        albumSearchResults.isEmpty() &&
+                        artistsSearchResults.isEmpty()
+                        ) -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(48.dp),
+                                painter = painterResource(id = R.drawable.ic_search),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Text(
+                                text = stringResource(R.string.search_empty_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            Text(
+                                text = stringResource(R.string.search_empty_subtitle),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+
                 else -> {
                     LazyColumn(
                         state = lazyColumnState,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues)
+                            .padding(paddingValues),
+                        contentPadding = PaddingValues(bottom = SwingDimens.BottomBarSpace)
                     ) {
                         topResultItem?.let { result ->
                             item {
