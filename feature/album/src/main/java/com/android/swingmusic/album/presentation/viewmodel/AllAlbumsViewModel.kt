@@ -1,0 +1,165 @@
+package com.android.swingmusic.album.presentation.viewmodel
+
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
+import com.android.swingmusic.album.domain.AlbumRepository
+import com.android.swingmusic.album.presentation.event.AlbumsUiEvent
+import com.android.swingmusic.album.presentation.state.AllAlbumsUiState
+import com.android.swingmusic.auth.domain.repository.AuthRepository
+import com.android.swingmusic.core.data.util.Resource
+import com.android.swingmusic.core.domain.util.SortBy
+import com.android.swingmusic.core.domain.util.SortOrder
+import com.android.swingmusic.settings.domain.repository.AppSettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class AllAlbumsViewModel @Inject constructor(
+    private val artistRepository: AlbumRepository,
+    private val authRepository: AuthRepository,
+    private val settingsRepository: AppSettingsRepository
+) : ViewModel() {
+
+    private val _baseUrl: MutableStateFlow<String?> = MutableStateFlow(null)
+    val baseUrl: StateFlow<String?> get() = _baseUrl
+
+    private val _allAlbumsUiState = mutableStateOf(AllAlbumsUiState())
+    val allAlbumsUiState: State<AllAlbumsUiState> = _allAlbumsUiState
+
+    val sortAlbumsByEntries: List<Pair<SortBy, String>> = listOf(
+        Pair(SortBy.LAST_PLAYED, "lastplayed"),
+        Pair(SortBy.CREATED_DATE, "created_date"),
+        Pair(SortBy.PLAY_COUNT, "playcount"),
+        Pair(SortBy.PLAY_DURATION, "playduration"),
+        Pair(SortBy.NO_OF_TRACKS, "trackcount"),
+        Pair(SortBy.TITLE, "title"),
+        Pair(SortBy.ALBUM_ARTISTS, "albumartists"),
+        Pair(SortBy.DATE, "date"),
+        Pair(SortBy.DURATION, "duration"),
+    )
+
+    // Settings
+    init {
+        settingsRepository.albumGridCount.onEach { gridCount ->
+            _allAlbumsUiState.value = _allAlbumsUiState.value.copy(gridCount = gridCount)
+        }.launchIn(viewModelScope)
+
+        combine(
+            settingsRepository.albumSortOrder.distinctUntilChanged(),
+            settingsRepository.albumSortBy.distinctUntilChanged()
+        ) { sortOrder, sortBy ->
+            val sortByPair = sortAlbumsByEntries.find { it.first == sortBy }
+                ?: Pair(SortBy.LAST_PLAYED, "lastplayed")
+
+            Pair(sortOrder, sortByPair)
+        }.onEach { (sortOrder, sortByPair) ->
+            _allAlbumsUiState.value = _allAlbumsUiState.value.copy(
+                sortOrder = sortOrder,
+                sortBy = sortByPair
+            )
+            getPagingAlbums(
+                sortBy = sortByPair.second,
+                sortOrder = sortOrder
+            )
+        }.launchIn(viewModelScope)
+    }
+
+    init {
+        getBaseUrl()
+        getAlbumCount()
+    }
+
+    private fun getBaseUrl() {
+        viewModelScope.launch {
+            _baseUrl.value = authRepository.getBaseUrl()
+        }
+    }
+
+    private fun getAlbumCount() {
+        viewModelScope.launch {
+            artistRepository.getAlbumCount().collectLatest {
+                _allAlbumsUiState.value = _allAlbumsUiState.value.copy(totalAlbums = it)
+            }
+        }
+    }
+
+    private fun getPagingAlbums(sortBy: String, sortOrder: SortOrder) {
+        val order = when (sortOrder) {
+            SortOrder.DESCENDING -> 1
+            SortOrder.ASCENDING -> 0
+        }
+        viewModelScope.launch {
+            _allAlbumsUiState.value = _allAlbumsUiState.value.copy(
+                pagingAlbums = artistRepository.getPagingAlbums(
+                    sortBy = sortBy,
+                    sortOrder = order
+                ).cachedIn(viewModelScope)
+            )
+        }
+    }
+
+    private fun updateGridCount(count: Int) {
+        viewModelScope.launch {
+            settingsRepository.setAlbumGridCount(count)
+        }
+    }
+
+    fun onAlbumsUiEvent(event: AlbumsUiEvent) {
+        when (event) {
+            is AlbumsUiEvent.OnSortBy -> {
+                viewModelScope.launch {
+                    // Retry fetching artist count if the previous sorting resulted to Error
+                    if (_allAlbumsUiState.value.totalAlbums is Resource.Error) {
+                        getAlbumCount()
+                    }
+
+                    if (event.sortByPair == _allAlbumsUiState.value.sortBy) {
+                        val newOrder = if (_allAlbumsUiState.value.sortOrder == SortOrder.ASCENDING)
+                            SortOrder.DESCENDING else SortOrder.ASCENDING
+
+                        settingsRepository.setAlbumSortOrder(newOrder)
+                    } else {
+                        settingsRepository.setAlbumSortOrder(SortOrder.DESCENDING)
+                        settingsRepository.setAlbumSortBy(event.sortByPair.first)
+                    }
+                }
+            }
+
+            is AlbumsUiEvent.OnClickAlbum -> {
+                // TODO: Navigate from the UI (handled by UI navigator)
+            }
+
+            is AlbumsUiEvent.OnUpdateGridCount -> {
+                updateGridCount(event.newCount)
+            }
+
+            is AlbumsUiEvent.OnRetry -> {
+                if (_allAlbumsUiState.value.totalAlbums is Resource.Error) {
+                    getAlbumCount()
+                }
+            }
+
+            is AlbumsUiEvent.OnPullToRefresh -> {
+                val sortBy = _allAlbumsUiState.value.sortBy
+                val sortOrder = _allAlbumsUiState.value.sortOrder
+
+                getPagingAlbums(
+                    sortBy = sortBy.second,
+                    sortOrder = sortOrder
+                )
+            }
+        }
+    }
+}

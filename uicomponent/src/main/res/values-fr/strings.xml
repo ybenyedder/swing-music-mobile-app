@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home">Accueil</string>
+    <string name="nav_library">Bibliothèque</string>
+    <string name="nav_albums">Albums</string>
+    <string name="nav_artists">Artistes</string>
+    <string name="nav_playlists">Playlists</string>
+    <string name="nav_favorites">Favoris</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_mixes">Mixes</string>
+    <string name="nav_lyrics">Paroles</string>
+    <string name="nav_history">Historique</string>
+    <string name="nav_settings">Paramètres</string>
+    <string name="nav_search">Rechercher</string>
+    <string name="nav_about">À propos</string>
+    <string name="nav_accounts">Comptes</string>
+    <string name="nav_folders">Dossiers</string>
+    <string name="nav_appearance">Apparence</string>
+    <string name="nav_pair">Appairer</string>
+    <string name="nav_theme">Thème</string>
+
+    <string name="search_placeholder">Rechercher</string>
+    <string name="hi_name">Salut %1$s</string>
+    <string name="quick_scan">Scan rapide</string>
+    <string name="log_out">Se déconnecter</string>
+    <string name="browse_library">Bibliothèque</string>
+    <string name="recently_played">Écoutés récemment</string>
+    <string name="top_artists_week">Top artistes cette semaine</string>
+    <string name="view_all">VOIR TOUT</string>
+    <string name="view_history">HISTORIQUE</string>
+
+    <string name="greeting_night">Salut, oiseau de nuit</string>
+    <string name="greeting_night_sub">Encore en session ?</string>
+    <string name="greeting_early">Salut, lève-tôt</string>
+    <string name="greeting_early_sub">Départ matinal.</string>
+    <string name="greeting_morning">Bonjour</string>
+    <string name="greeting_morning_sub">Choisis du frais.</string>
+    <string name="greeting_afternoon">Bon après-midi</string>
+    <string name="greeting_afternoon_sub">Appuie sur lecture.</string>
+    <string name="greeting_evening">Bonsoir</string>
+    <string name="greeting_evening_sub">Détends-toi.</string>
+
+    <string name="stats_artists">Artistes</string>
+    <string name="stats_albums">Albums</string>
+    <string name="stats_favorites">Favoris</string>
+    <string name="stats_top_artist">Top artiste</string>
+    <string name="stats_subtitle_hero">Votre bibliothèque en bref</string>
+    <string name="stats_items_tracked">%1$d éléments suivis</string>
+
+    <string name="lyrics_subtitle">Paroles synchronisées pour la piste en cours</string>
+    <string name="lyrics_no_track">Aucune piste en lecture</string>
+    <string name="lyrics_none">Pas de paroles disponibles</string>
+    <string name="lyrics_provided_by">Paroles fournies par lrclib.net</string>
+
+    <!-- Recherche -->
+    <string name="search_empty_title">Rechercher de la musique</string>
+    <string name="search_empty_subtitle">Trouvez des titres, artistes et albums</string>
+
+    <!-- Historique -->
+    <string name="history_subtitle">Les titres que vous avez écoutés récemment</string>
+    <string name="history_empty_title">Aucun historique</string>
+    <string name="history_empty_subtitle">Écoutez quelques titres et ils apparaîtront ici.</string>
+
+    <string name="favorites_tracks_count">%1$d pistes</string>
+    <string name="favorites_load_error">Impossible de charger les favoris</string>
+    <string name="favorites_empty_title">Aimez pour voir ici</string>
+    <string name="favorites_empty_subtitle">Appuyez sur le cœur d\'une piste, d\'un album ou d\'un artiste pour l\'ajouter.</string>
+
+    <string name="playlists_load_error">Impossible de charger les playlists</string>
+    <string name="playlists_empty_title">Pas encore de playlist</string>
+    <string name="playlists_empty_subtitle">Créez une playlist depuis le client web. Elle apparaîtra ici.</string>
+    <string name="playlist_tracks_count">%1$d pistes</string>
+    <string name="playlist_untitled">Sans titre</string>
+    <string name="playlist_empty_title">Playlist vide</string>
+    <string name="playlist_empty_subtitle">Aucune piste dans cette playlist.</string>
+
+    <string name="mixes_subtitle">Sélections quotidiennes selon vos goûts</string>
+    <string name="mixes_empty_title">Vos mixes apparaîtront ici</string>
+    <string name="mixes_empty_subtitle">Écoutez quelques pistes et Swing Music créera des mixes quotidiens.</string>
+
+    <string name="welcome_title">Bienvenue sur Swing Music</string>
+    <string name="welcome_subtitle">Votre serveur de streaming auto-hébergé, désormais sur Android.</string>
+    <string name="onboarding_step1">1. Lancez le serveur Swing Music sur votre machine.</string>
+    <string name="onboarding_step2">2. Ouvrez le client web puis Paramètres → Appairer un appareil.</string>
+    <string name="onboarding_step3">3. Scannez le QR code ou saisissez l\'URL manuellement.</string>
+    <string name="onboarding_scan_qr">Scanner le QR</string>
+    <string name="onboarding_signin">Connexion par identifiant</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_section_library">Bibliothèque</string>
+    <string name="settings_section_audio">Audio &amp; Extensions</string>
+    <string name="settings_section_account">Compte</string>
+    <string name="settings_section_admin">Administration</string>
+    <string name="settings_folders_sub">Répertoires racine et options d\'affichage</string>
+    <string name="settings_albums_sub">Grille et tri</string>
+    <string name="settings_artists_sub">Grille et tri</string>
+    <string name="settings_stats_sub">Aperçu de votre bibliothèque</string>
+    <string name="settings_lyrics_sub">Paroles synchronisées via lrclib.net</string>
+    <string name="settings_playback_sub">Crossfade, gapless (bientôt)</string>
+    <string name="settings_lastfm_sub">Scrobbling (bientôt)</string>
+    <string name="settings_accounts_sub">Changer ou ajouter un compte</string>
+    <string name="settings_appearance_sub">Barre latérale, mode liste, en-tête</string>
+    <string name="settings_about_sub">Version, journal, liens</string>
+    <string name="settings_manage_users">Gérer les utilisateurs</string>
+    <string name="settings_manage_users_sub">Créer des comptes et attribuer des rôles</string>
+    <string name="settings_admin_badge">ADMIN</string>
+
+    <string name="about_title">À propos</string>
+    <string name="about_client">Client Android</string>
+    <string name="about_server_source">Code source du serveur</string>
+    <string name="about_client_source">Client Android</string>
+
+    <string name="appearance_title">Apparence</string>
+    <string name="appearance_theme_name">Thème Swing</string>
+    <string name="appearance_theme_sub">Mode sombre par défaut, accents dynamiques selon les pochettes.</string>
+    <string name="appearance_coming_soon">BIENTÔT</string>
+    <string name="appearance_feature_themes">Thème clair / sombre / automatique</string>
+    <string name="appearance_feature_accent">Couleur d\'accent personnalisée</string>
+    <string name="appearance_feature_density">Densité d\'affichage (compact / confort)</string>
+    <string name="appearance_feature_artist_shape">Forme des pochettes artiste (cercle / carré)</string>
+
+    <string name="sort_by">Trier par</string>
+    <string name="artists_count_template">Vous avez %1$s artistes dans votre bibliothèque</string>
+    <string name="artists_count_one">Vous avez 1 artiste dans votre bibliothèque</string>
+    <string name="artists_count_zero">Aucun artiste</string>
+    <string name="artists_loading">Chargement des artistes…</string>
+    <string name="albums_count_template">Vous avez %1$s albums dans votre bibliothèque</string>
+    <string name="albums_count_one">Vous avez 1 album dans votre bibliothèque</string>
+    <string name="albums_count_zero">Aucun album</string>
+    <string name="albums_loading">Chargement des albums…</string>
+    <string name="grid_count">Colonnes</string>
+    <string name="retry">RÉESSAYER</string>
+
+    <string name="player_lyrics">Paroles</string>
+    <string name="player_repeat">Répétition</string>
+    <string name="player_queue">File</string>
+    <string name="player_shuffle">Aléatoire</string>
+    <string name="player_now_playing">En lecture</string>
+    <string name="player_queue_empty">File vide</string>
+
+    <string name="folders_title">Dossiers</string>
+    <string name="folders_empty">Ce dossier est vide.</string>
+    <string name="folders_configure_root">Configurer le dossier racine</string>
+
+    <string name="sheet_goto_artist">Voir l\'artiste</string>
+    <string name="sheet_goto_album">Voir l\'album</string>
+    <string name="sheet_goto_folder">Voir le dossier</string>
+    <string name="sheet_play_next">Jouer ensuite</string>
+    <string name="sheet_add_to_queue">Ajouter à la file</string>
+
+    <string name="loading">Chargement…</string>
+    <string name="not_logged_in">Non connecté</string>
+    <string name="unknown">Inconnu</string>
+</resources>

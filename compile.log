@@ -1,0 +1,167 @@
+> Task :auth:preBuild UP-TO-DATE
+> Task :auth:preDebugBuild UP-TO-DATE
+> Task :auth:generateDebugResValues UP-TO-DATE
+> Task :auth:generateDebugResources UP-TO-DATE
+> Task :auth:packageDebugResources UP-TO-DATE
+> Task :auth:parseDebugLocalResources UP-TO-DATE
+> Task :auth:generateDebugRFile UP-TO-DATE
+> Task :auth:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:preBuild UP-TO-DATE
+> Task :core:preDebugBuild UP-TO-DATE
+> Task :core:generateDebugResValues UP-TO-DATE
+> Task :core:generateDebugResources UP-TO-DATE
+> Task :core:packageDebugResources UP-TO-DATE
+> Task :core:parseDebugLocalResources UP-TO-DATE
+> Task :core:generateDebugRFile UP-TO-DATE
+> Task :core:compileDebugKotlin UP-TO-DATE
+> Task :core:javaPreCompileDebug UP-TO-DATE
+> Task :core:compileDebugJavaWithJavac NO-SOURCE
+> Task :core:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :database:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :database:preBuild UP-TO-DATE
+> Task :database:preDebugBuild UP-TO-DATE
+> Task :database:generateDebugResValues UP-TO-DATE
+> Task :database:generateDebugResources UP-TO-DATE
+> Task :database:packageDebugResources UP-TO-DATE
+> Task :database:parseDebugLocalResources UP-TO-DATE
+> Task :database:generateDebugRFile UP-TO-DATE
+> Task :database:kspDebugKotlin UP-TO-DATE
+> Task :database:compileDebugKotlin UP-TO-DATE
+> Task :database:javaPreCompileDebug UP-TO-DATE
+> Task :database:compileDebugJavaWithJavac UP-TO-DATE
+> Task :database:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :uicomponent:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :uicomponent:preBuild UP-TO-DATE
+> Task :uicomponent:preDebugBuild UP-TO-DATE
+> Task :uicomponent:generateDebugResValues UP-TO-DATE
+> Task :uicomponent:generateDebugResources UP-TO-DATE
+> Task :uicomponent:packageDebugResources UP-TO-DATE
+> Task :uicomponent:parseDebugLocalResources UP-TO-DATE
+> Task :uicomponent:generateDebugRFile UP-TO-DATE
+> Task :uicomponent:compileDebugKotlin UP-TO-DATE
+> Task :uicomponent:javaPreCompileDebug UP-TO-DATE
+> Task :uicomponent:compileDebugJavaWithJavac NO-SOURCE
+> Task :uicomponent:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :feature:common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:common:preBuild UP-TO-DATE
+> Task :feature:common:preDebugBuild UP-TO-DATE
+> Task :feature:common:generateDebugResValues UP-TO-DATE
+> Task :feature:common:generateDebugResources UP-TO-DATE
+> Task :feature:common:packageDebugResources UP-TO-DATE
+> Task :feature:common:parseDebugLocalResources UP-TO-DATE
+> Task :feature:common:generateDebugRFile UP-TO-DATE
+> Task :feature:common:kspDebugKotlin UP-TO-DATE
+> Task :feature:common:compileDebugKotlin UP-TO-DATE
+> Task :feature:common:javaPreCompileDebug UP-TO-DATE
+> Task :feature:common:compileDebugJavaWithJavac NO-SOURCE
+> Task :feature:common:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :auth:kspDebugKotlin UP-TO-DATE
+> Task :auth:compileDebugKotlin UP-TO-DATE
+> Task :auth:javaPreCompileDebug UP-TO-DATE
+> Task :auth:compileDebugJavaWithJavac UP-TO-DATE
+> Task :core:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :database:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :uicomponent:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :feature:common:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :auth:transformDebugClassesWithAsm UP-TO-DATE
+> Task :auth:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :network:preBuild UP-TO-DATE
+> Task :network:preDebugBuild UP-TO-DATE
+> Task :network:generateDebugResValues UP-TO-DATE
+> Task :network:generateDebugResources UP-TO-DATE
+> Task :network:packageDebugResources UP-TO-DATE
+> Task :network:parseDebugLocalResources UP-TO-DATE
+> Task :network:generateDebugRFile UP-TO-DATE
+> Task :auth:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :network:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :network:kspDebugKotlin UP-TO-DATE
+> Task :network:compileDebugKotlin UP-TO-DATE
+> Task :network:javaPreCompileDebug UP-TO-DATE
+> Task :network:compileDebugJavaWithJavac UP-TO-DATE
+> Task :network:transformDebugClassesWithAsm UP-TO-DATE
+> Task :network:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :feature:home:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:home:preBuild UP-TO-DATE
+> Task :feature:home:preDebugBuild UP-TO-DATE
+> Task :feature:home:generateDebugResValues UP-TO-DATE
+> Task :feature:home:generateDebugResources UP-TO-DATE
+> Task :feature:home:packageDebugResources UP-TO-DATE
+> Task :feature:home:parseDebugLocalResources UP-TO-DATE
+> Task :feature:home:generateDebugRFile UP-TO-DATE
+> Task :feature:player:preBuild UP-TO-DATE
+> Task :feature:player:preDebugBuild UP-TO-DATE
+> Task :feature:player:generateDebugResValues UP-TO-DATE
+> Task :feature:player:generateDebugResources UP-TO-DATE
+> Task :feature:player:packageDebugResources UP-TO-DATE
+> Task :feature:player:parseDebugLocalResources UP-TO-DATE
+> Task :feature:player:generateDebugRFile UP-TO-DATE
+> Task :network:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :feature:player:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :feature:player:kspDebugKotlin UP-TO-DATE
+> Task :feature:player:compileDebugKotlin UP-TO-DATE
+> Task :feature:player:javaPreCompileDebug UP-TO-DATE
+> Task :feature:player:compileDebugJavaWithJavac UP-TO-DATE
+> Task :feature:player:transformDebugClassesWithAsm UP-TO-DATE
+> Task :feature:player:bundleLibCompileToJarDebug UP-TO-DATE
+
+> Task :feature:home:kspDebugKotlin FAILED
+e: [ksp] com.ramcosta.composedestinations.codegen.commons.IllegalDestinationsSetup: Parameter "playlistsViewModel" of composable Home was not resolvable: please review it.
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper.toParameter(KspToCodeGenDestinationsMapper.kt:504)
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper.toDestination(KspToCodeGenDestinationsMapper.kt:113)
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper.access$toDestination(KspToCodeGenDestinationsMapper.kt:67)
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper$map$1.invoke(KspToCodeGenDestinationsMapper.kt:78)
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper$map$1.invoke(KspToCodeGenDestinationsMapper.kt:78)
+	at kotlin.sequences.TransformingSequence$iterator$1.next(Sequences.kt:210)
+	at kotlin.sequences.SequencesKt___SequencesKt.toList(_Sequences.kt:820)
+	at com.ramcosta.composedestinations.ksp.processors.KspToCodeGenDestinationsMapper.map(KspToCodeGenDestinationsMapper.kt:78)
+	at com.ramcosta.composedestinations.ksp.processors.Processor.process(Processor.kt:55)
+	at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension$doAnalysis$8$1.invoke(KotlinSymbolProcessingExtension.kt:320)
+	at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension$doAnalysis$8$1.invoke(KotlinSymbolProcessingExtension.kt:318)
+	at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension.handleException(KotlinSymbolProcessingExtension.kt:430)
+	at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension.doAnalysis(KotlinSymbolProcessingExtension.kt:318)
+	at org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(TopDownAnalyzerFacadeForJVM.kt:112)
+	at org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration$default(TopDownAnalyzerFacadeForJVM.kt:75)
+	at org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler.analyze$lambda$9(KotlinToJVMBytecodeCompiler.kt:356)
+	at org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport.analyzeAndReport(AnalyzerWithCompilerReport.kt:112)
+	at org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler.analyze(KotlinToJVMBytecodeCompiler.kt:347)
+	at org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler.runFrontendAndGenerateIrUsingClassicFrontend(KotlinToJVMBytecodeCompiler.kt:177)
+	at org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler.compileModules$cli(KotlinToJVMBytecodeCompiler.kt:102)
+	at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:169)
+	at org.jetbrains.kotlin.cli.jvm.K2JVMCompiler.doExecute(K2JVMCompiler.kt:43)
+	at org.jetbrains.kotlin.cli.common.CLICompiler.execImpl(CLICompiler.kt:102)
+	at org.jetbrains.kotlin.cli.common.CLICompiler.exec(CLICompiler.kt:316)
+	at org.jetbrains.kotlin.daemon.CompileServiceImpl.compile(CompileServiceImpl.kt:1554)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200)
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+e: Error occurred in KSP, check log for detail
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':feature:home:kspDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 3s
+80 actionable tasks: 1 executed, 79 up-to-date

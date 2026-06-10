@@ -1,0 +1,22 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+**/build/
+/captures
+/app/release
+.externalNativeBuild
+.cxx
+local.properties
+*.keystore
+keystore-base64.txt
+.kotlin/
+*.jks
+*.apk
+swing-music-app-v2.1-favlists.apk
+
+# Keystore creds + backup (never commit)
+keystore.properties.local
+*.keystore.bak
